@@ -1,56 +1,41 @@
-# QUDI_RealTimeData
+# Docker Real-Time Simulation Environment
 
-In dieser Dockerumgebung werden innerhalb eines Python Skriptes verschiedene Echtzei-Simulationsdaten in einem vordefinierten Quartier in Herne simuliert. Die Simulationsergebnisse werden als Datenstrom zunächst über einen Kafkabroker konsumiert und dann über HiveMQ wieder als MQTT Strom zur Verfügung gestellt. Des Weiteren ist Zookeeper angelegt worden um ein Kafka Cluster zu bilden, um mehrere Simulationen in der gleichen Umgebung anlegen zu können. 
+Dieses Repository stellt eine Docker-basierte Umgebung bereit, in der unterschiedliche Python-Skripte Realdaten simulieren. Die erzeugten Daten werden zunächst in Kafka verarbeitet und anschließend über HiveMQ als MQTT-Stream zur Verfügung gestellt. Zookeeper dient dabei der Koordination eines kleinen Kafka-Clusters, sodass mehrere Simulationen parallel laufen können.
 
-Es werden simuliert: stündliche Stromverbrauchsdaten der Wohnhäuser; Ein- und ausfahrende Fahrzeuge (Auto, LKW, Fahrrad) an drei Messstellen; Ein Deliverybot, der Waren vom Supermarkt zu Haushalten bringt.
+## Inhalte des Repository
 
-Über
+* **energyconsumption_simulation** – generiert stündliche Stromverbrauchsdaten der Wohngebäude
+* **mobility_simulation** – simuliert ein- und ausfahrende Fahrzeuge an drei Messstellen
+* **delivery_simulation** – bewegt einen Lieferbot durch das Viertel
+* **\*_bridge** – leiten Daten aus Kafka an den MQTT‑Broker weiter
+* **energyconsumption_consumer** – stellt einen einfachen HTTP-Endpunkt zum Mitlesen der Daten bereit
+* **mqtt_to_db** – schreibt MQTT-Nachrichten optional in eine TimescaleDB
+* **delivery_webmap** – kleine Webkarte zur Visualisierung der Bot-Bewegungen
 
-```
+Die zentrale Orchestrierung erfolgt über `docker-compose.yml`.
+
+## Starten der Umgebung
+
+```bash
 docker-compose up --build
 ```
 
-baust du die Docker-Images und startest sämtliche Container der Umgebung.
+Damit werden alle Images gebaut und sämtliche Container gestartet. Anschließend stehen folgende Dienste bereit:
 
-Über 
+* Kafka unter `localhost:9092` (externer Zugriff über Port 29092)
+* HiveMQ unter [http://localhost:8080](http://localhost:8080)
+* Stromdaten-Stream via HTTP unter [http://localhost:5000/stream](http://localhost:5000/stream)
+* Delivery-Webkarte unter [http://localhost:8081](http://localhost:8081)
+* pgAdmin für die Timescale-Datenbank unter [http://localhost:8082](http://localhost:8082)
 
-```
-http://localhost:5000/stream 
-```
-können die Ergebnisse der Simulation als Messages des Kafka Brokers eingesehen werden.
+## MQTT-Anbindung
 
-## Weitere Hinweise
+Über eine kleine Bridge werden die in Kafka verarbeiteten Datenströme an HiveMQ weitergeleitet. Relevante Parameter:
 
-* Die Web-Oberfläche des MQTT-Brokers erreichst du unter [http://localhost:8080](http://localhost:8080).
-* Eine kleine Karte zur Visualisierung der Delivery-Simulation läuft auf [http://localhost:8081](http://localhost:8081).
-* Über [http://localhost:8082](http://localhost:8082) kann optional die Timescale-Datenbank via pgAdmin verwaltet werden.
+- **Broker**: `hivemq`
+- **Port**: `1883`
+- **Topics**: `node-red/stromdaten`, `node-red/deliverydata`, `node-red/mobilitydata`
+- **Format**: JSON
 
-## Simulation des Stromverbrauchs
-Die Simulation des Stromverbrauchs beruht im wesentlichen auf den tatsächlichen Grundflächen der Wohngebäude, davon ausgehend geschätzten Bewohneranzahlen und Verbrauchsannahmen die sich an Jahreszeiten, Wochentagen, Uhrzeiten oder extremen Verbrauchern orientiert. Ausgehend von den Simulationsergebnissen ist nicht auf tatsächliche Verbräuche im Quartier zu schließen. 
+Die optional aktivierbare Komponente `mqtt_to_db` kann sämtliche MQTT-Nachrichten zusätzlich in einer TimescaleDB persistieren. Die Zugangsdaten lassen sich über Umgebungsvariablen konfigurieren (siehe `docker-compose.yml`).
 
-## Simulation des Mobility Counters
-Die Mobility-Simulation erzeugt Fahrzeugbewegungen an drei definierten Messstellen
-im Quartier. Abhängig von Tageszeit, Wochenendfaktoren und Saison werden
-stochastisch Einfahrten pro Stunde berechnet. Jedes Fahrzeug erhält eine
-Verweildauer und ein Ziel, sodass neben Einfahrt‑ auch Abfahrtsereignisse
-entstehen. Die Ereignisse werden fortlaufend an Kafka unter dem Topic
-`mobilitydata` gesendet.
-
-## Simulation des Delivery Bots
-Ein Lieferfahrzeug startet am Supermarkt und fährt zufällige Haushalte an. Die
-Routenplanung erfolgt auf Basis eines einfachen Straßennetzes, die Position des
-Fahrzeugs wird sekündlich aktualisiert. Sobald ein Ziel erreicht ist, wird eine
-kurze Lieferpause simuliert, anschließend geht es zurück oder zum nächsten
-Haushalt. Alle Positionsupdates werden als Kafka‑Nachrichten im Topic
-`deliverydata` veröffentlicht.
-
-## MQTT-Anbindung via Kafka-MQTT-Bridge
-
-Es wird eine Bridge verwendet, die den in Kafka verarbeiteten Datenstrom abgreift und diesen an einen HiveMQ MQTT-Broker weiterleitet.
-
-Die für den MQTT-Zugriff relevanten Parameter sind:
-
-- **MQTT-Broker:** `hivemq` (im Docker-Netzwerk; alternativ die entsprechende IP/Domain, falls von außen erreichbar)
-- **Port:** `1883` (Standardport für unverschlüsselte MQTT-Verbindungen)
-- **Topic:** `node-red/stromdaten`;`node-red/deliverydata`;`node-red/mobilitydata`
-- **Nachrichtenformat:** JSON
