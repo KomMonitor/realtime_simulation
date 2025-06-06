@@ -1,0 +1,137 @@
+version: '3'
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,PLAINTEXT_HOST://0.0.0.0:29092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+
+  hivemq:
+    image: hivemq/hivemq-ce
+    ports:
+      - "1883:1883"
+      - "8080:8080"
+
+  energyconsumption_simulation:
+    build: ./energyconsumption_simulation
+    depends_on:
+      - kafka
+      - hivemq
+
+  mobility_simulation:
+    build: ./mobility_simulation
+    depends_on:
+      - kafka
+      - hivemq
+
+  energyconsumption_bridge:
+    build: ./energyconsumption_bridge
+    depends_on:
+      - kafka
+      - hivemq
+
+  mobility_bridge:
+    build: ./mobility_bridge
+    depends_on:
+      - kafka
+      - hivemq
+
+  delivery_simulation:
+    build: ./delivery_simulation
+    depends_on:
+      - kafka
+      - hivemq
+
+  delivery_bridge:
+    build: ./delivery_bridge
+    depends_on:
+      - kafka
+      - hivemq
+
+  energyconsumption_consumer:
+    build: ./energyconsumption_consumer
+    ports:
+      - "5000:5000"
+    depends_on:
+      - kafka
+
+  timescaledb:
+    image: timescale/timescaledb:latest-pg13
+    environment:
+      POSTGRES_PASSWORD: yourpassword
+      POSTGRES_USER: youruser
+      POSTGRES_DB: yourdb
+    ports:
+      - "5434:5432"  # Extern 5434, intern 5432
+    volumes:
+      - timescale_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U youruser -d yourdb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mqtt_to_db:
+    build: ./mqtt_to_db
+    depends_on:
+      timescaledb:
+        condition: service_healthy
+      hivemq:
+        condition: service_started
+    environment:
+      MQTT_BROKER: hivemq
+      MQTT_PORT: "1883"
+      MQTT_TOPICS: "node-red/#"
+      DB_HOST: timescaledb
+      DB_PORT: "5432"
+      DB_USER: youruser
+      DB_PASSWORD: yourpassword
+      DB_NAME: yourdb
+
+  delivery_webmap:
+    build: ./delivery_webmap
+    depends_on:
+      timescaledb:
+        condition: service_healthy
+    environment:
+      DB_HOST: timescaledb
+      DB_PORT: "5432"
+      DB_USER: youruser
+      DB_PASSWORD: yourpassword
+      DB_NAME: yourdb
+    ports:
+      - "8081:80"
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "8082:80"
+    depends_on:
+      - timescaledb
+    volumes:
+      - type: bind
+        source: ./servers.json
+        target: /pgadmin4/servers.json
+
+volumes:
+  timescale_data:

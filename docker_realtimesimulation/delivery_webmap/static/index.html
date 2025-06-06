@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Delivery Vehicle & Energy Consumption Map</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+  <style>
+    html, body, #map {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+  <!-- Proj4JS für Koordinatentransformation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.7.5/proj4.js"></script>
+  <script>
+    // Definiere die Projektionen
+    proj4.defs("EPSG:25832", "+proj=utm +zone=32 +ellps=GRS80 +units=m +no_defs");
+    var sourceProjection = "EPSG:25832";
+    var destProjection = "EPSG:4326";
+
+    // Funktion zur Umrechnung der Koordinaten
+    function convertCoords(point) {
+      var converted = proj4(sourceProjection, destProjection, point);
+      return [converted[1], converted[0]]; // Leaflet erwartet [lat, lon]
+    }
+
+    // Karte initialisieren: Startposition in EPSG:25832 wird konvertiert
+    var startEPSG25832 = [377500, 5713400];
+    var startLatLon = convertCoords(startEPSG25832);
+    var map = L.map('map').setView(startLatLon, 15);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Globale Variable für die dynamischen Energieverbrauchsdaten
+    // (Mapping: Gebäude-FID -> Verbrauch in kWh)
+    var energyData = {};
+
+    // Funktion zur Farbklassifikation in 4 Klassen:
+    // < 0.5 kWh: grün, 0.5 bis <1.0: gelb, 1.0 bis <2.0: orange, ≥2.0: rot
+    function getColor(consumption) {
+      return consumption < 0.5 ? "#00FF00" :
+             consumption < 1.0 ? "#FFFF00" :
+             consumption < 2.0 ? "#FFA500" : "#FF0000";
+    }
+
+    // Style-Funktion für den GeoJSON-Layer
+    function styleFeature(feature) {
+      var fid = feature.properties.FID;
+      var consumption = energyData[fid];
+      var fillColor = consumption !== undefined ? getColor(consumption) : "#CCCCCC";
+      return {
+        weight: 1,
+        color: '#333',
+        fillColor: fillColor,
+        fillOpacity: 0.6
+      };
+    }
+
+    // Gebäude-Layer (statisch) laden – hier wird der GeoJSON-Layer erstellt und
+    // mit der Option coordsToLatLng werden alle Koordinaten transformiert
+    var buildingLayer;
+    fetch('buildings.geojson')
+      .then(response => response.json())
+      .then(geojsonData => {
+        buildingLayer = L.geoJSON(geojsonData, {
+          // Transformiere alle Koordinaten von EPSG:25832 zu EPSG:4326
+          coordsToLatLng: function(coords) {
+            return convertCoords(coords);
+          },
+          style: styleFeature,
+          onEachFeature: function(feature, layer) {
+            layer.bindPopup("FID: " + feature.properties.FID);
+          }
+        }).addTo(map);
+      })
+      .catch(error => {
+        console.error("Fehler beim Laden der Gebäude-Geometrien:", error);
+      });
+
+    // Funktion, um die dynamischen Energieverbrauchsdaten per REST-API abzurufen
+    function fetchEnergyData() {
+      fetch('/api/energydata')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error("API-Antwort nicht OK");
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log("Energieverbrauchsdaten:", data);
+          energyData = data;
+          // Aktualisiere den Stil des Gebäude-Layers, um die Farben neu zu setzen
+          if (buildingLayer) {
+            buildingLayer.setStyle(styleFeature);
+          }
+        })
+        .catch(error => {
+          console.error("Fehler beim Abrufen der Energieverbrauchsdaten:", error);
+        });
+    }
+
+    // Funktion, um die Delivery-Daten (z.B. den aktuellen Standort des Delivery Bots) abzurufen
+    function fetchDeliveryData() {
+      fetch('/api/deliverydata')
+        .then(response => {
+          if (!response.ok) throw new Error("API-Antwort nicht OK");
+          return response.json();
+        })
+        .then(data => {
+          console.log("Delivery-Daten:", data);
+          if (data && data.position && Array.isArray(data.position)) {
+            var newLatLon = convertCoords(data.position);
+            deliveryMarker.setLatLng(newLatLon);
+            map.panTo(newLatLon);
+          }
+        })
+        .catch(error => {
+          console.error("Fehler beim Abrufen der Delivery-Daten:", error);
+        });
+    }
+
+    // Erstelle einen Marker für den Delivery Bot
+    var deliveryMarker = L.marker(startLatLon).addTo(map);
+
+    // Polling: Alle 5 Sekunden die REST-API-Endpunkte abfragen
+    setInterval(fetchEnergyData, 5000);
+    setInterval(fetchDeliveryData, 1000);
+    // Direkt beim Laden initial aufrufen
+    fetchEnergyData();
+    fetchDeliveryData();
+  </script>
+</body>
+</html>
