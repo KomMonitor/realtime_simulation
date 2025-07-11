@@ -1,16 +1,16 @@
 # Docker Real-Time Simulation Environment
 
-Dieses Repository stellt eine Docker-basierte Umgebung bereit, in der unterschiedliche Python-Skripte Realdaten simulieren. Die erzeugten Daten werden zunächst in Kafka verarbeitet und anschließend über HiveMQ als MQTT-Stream zur Verfügung gestellt. Zookeeper dient dabei der Koordination eines kleinen Kafka-Clusters, sodass mehrere Simulationen parallel laufen können.
+Dieses Repository stellt eine Docker-basierte Umgebung bereit, in der unterschiedliche Python-Skripte Echtzeitdatenströme innerhalb eines Stadtquartiers simulieren. Die erzeugten Daten werden zunächst in Kafka verarbeitet und anschließend über HiveMQ als MQTT-Stream zur Verfügung gestellt. Zookeeper dient dabei der Koordination eines kleinen Kafka-Clusters, sodass mehrere Simulationen parallel laufen können.
 
 ## Inhalte des Repository
 
 * **energyconsumption_simulation** – generiert stündliche Stromverbrauchsdaten der Wohngebäude
 * **mobility_simulation** – simuliert ein- und ausfahrende Fahrzeuge an drei Messstellen
-* **delivery_simulation** – bewegt einen Lieferbot durch das Viertel
+* **delivery_simulation** – bewegt einen Lieferbot vom Supermarkt hin zu zufällig ausgewählten Gebäuden und zurück
 * **\*_bridge** – leiten Daten aus Kafka an den MQTT‑Broker weiter
 * **energyconsumption_consumer** – stellt einen einfachen HTTP-Endpunkt zum Mitlesen der Daten bereit
-* **mqtt_to_db** – schreibt MQTT-Nachrichten optional in eine TimescaleDB
-* **delivery_webmap** – kleine Webkarte zur Visualisierung der Bot-Bewegungen
+* **mqtt_to_db** – schreibt MQTT-Nachrichten in eine TimescaleDB (optional)
+* **delivery_webmap** – Einfache Webkarte zur Visualisierung der Bot-Bewegungen (optional)
 
 Die zentrale Orchestrierung erfolgt über `docker-compose.yml`.
 
@@ -30,7 +30,7 @@ Damit werden alle Images gebaut und sämtliche Container gestartet. Anschließen
 
 ## MQTT-Anbindung
 
-Über eine kleine Bridge werden die in Kafka verarbeiteten Datenströme an HiveMQ weitergeleitet. Relevante Parameter:
+Über eine Bridge werden die in Kafka verarbeiteten Datenströme an HiveMQ weitergeleitet. Relevante Parameter:
 
 - **Broker**: `hivemq`
 - **Port**: `1883`
