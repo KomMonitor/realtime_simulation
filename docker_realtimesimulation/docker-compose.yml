@@ -5,45 +5,6 @@ networks:
     name: ${NETWORK_NAME}
 
 services:
-  # zookeeper:
-  #   image: confluentinc/cp-zookeeper:latest
-  #   environment:
-  #     ZOOKEEPER_CLIENT_PORT: 2181
-  #     ZOOKEEPER_TICK_TIME: 2000
-  #   ports:
-  #     - "2181:2181"
-  #   networks:
-  #     - ${NETWORK_NAME}
-
-  kafka:
-    image: apache/kafka:4.1.0
-    ports:
-      - "9092:9092"
-      - "29092:29092"
-      - "9093:9093"
-    environment:
-      KAFKA_NODE_ID: 1
-      KAFKA_PROCESS_ROLES: broker,controller
-      KAFKA_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092,CONTROLLER://localhost:9093
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
-      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@localhost:9093
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
-      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
-      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
-      KAFKA_NUM_PARTITIONS: 3
-    networks:
-      - ${NETWORK_NAME}
-
-  hivemq:
-    image: hivemq/hivemq-ce:2025.4
-    ports:
-      - "1883:1883"
-      - "8080:8080"
-    networks:
-      - ${NETWORK_NAME}
 
   energyconsumption_simulation:
     build: ./energyconsumption_simulation
@@ -102,24 +63,6 @@ services:
     networks:
       - ${NETWORK_NAME}
 
-  timescaledb:
-    image: timescale/timescaledb:latest-pg13
-    environment:
-      POSTGRES_PASSWORD: yourpassword
-      POSTGRES_USER: youruser
-      POSTGRES_DB: yourdb
-    ports:
-      - "5434:5432"  # Extern 5434, intern 5432
-    volumes:
-      - timescale_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U youruser -d yourdb"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    networks:
-      - ${NETWORK_NAME}
-
   mqtt_to_db:
     build: ./mqtt_to_db
     depends_on:
@@ -152,22 +95,6 @@ services:
       DB_NAME: yourdb
     ports:
       - "8081:80"
-    networks:
-      - ${NETWORK_NAME}
-
-  pgadmin:
-    image: dpage/pgadmin4:latest
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: admin
-    ports:
-      - "8082:80"
-    depends_on:
-      - timescaledb
-    volumes:
-      - type: bind
-        source: ./servers.json
-        target: /pgadmin4/servers.json
     networks:
       - ${NETWORK_NAME}
 

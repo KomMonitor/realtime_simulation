@@ -14,6 +14,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./realms/realm-export-kommonitor.json:/opt/keycloak/data/import/realm.json
+      - ./storage/keycloak-db/data:/opt/keycloak/data/h2
     command:
       - --import-realm
       - --features=admin-fine-grained-authz:v1,scripts,token-exchange:v1
@@ -82,6 +83,7 @@ services:
       - 5432:5432
     volumes:
       - ./storage/database/data:/var/lib/postgresql/data
+      - ./storage/database/kommonitor_data.sql:/docker-entrypoint-initdb.d/kommonitor_data.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -d ${DB_NAME} -U ${DB_USER}"]
       interval: 10s
