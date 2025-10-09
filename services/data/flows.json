@@ -179,7 +179,7 @@
         "id": "61cc68e6876f86ac",
         "type": "function",
         "z": "3e78cd8f9d6eb3de",
-        "name": "function 1",
+        "name": "Spatial aggregation",
         "func": "const turf = global.get('turf');\n\n// Get the polygons stored in the flow context\nconst spatialUnits = flow.get('spatialUnits');\nconst featureCollectionObject = JSON.parse(spatialUnits);\n\n\n// const spatialUnitsCollection = turf.featureCollection(spatialUnits);\nconst bbox = turf.bbox(featureCollectionObject);\n\nmsg.payload = bbox;\n\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
@@ -187,7 +187,7 @@
         "initialize": "// Der Code hier wird ausgeführt,\n// wenn der Node gestartet wird\n// const turf = global.get('turf');",
         "finalize": "",
         "libs": [],
-        "x": 680,
+        "x": 710,
         "y": 620,
         "wires": [
             [
