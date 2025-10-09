@@ -7,6 +7,9 @@ import numpy as np
 import pandas as pd
 from kafka import KafkaProducer
 from kafka.errors import KafkaError
+import os
+
+EC_PUSH_TIME = float(os.getenv("EC_PUSH_TIME", "30"))
 
 # Kafka-Konfiguration
 KAFKA_BROKER = 'kafka:9092'
@@ -118,7 +121,7 @@ def simulate_consumption_for_building(row, current_time):
 current_time = datetime.now().replace(minute=0, second=0, microsecond=0)
 # Alternativ: current_time = datetime(2025, 1, 1, 0, 0, 0)
 
-# Endlosschleife: Jede 10 Sekunden wird eine neue simulierte Stunde berechnet und als Kafka-Nachricht gesendet
+# Endlosschleife: Jede 30 Sekunden wird eine neue simulierte Stunde berechnet und als Kafka-Nachricht gesendet
 while True:
     for idx, row in df_buildings.iterrows():
         consumption = simulate_consumption_for_building(row, current_time)
@@ -136,4 +139,4 @@ while True:
         print(f"Gesendet: {data}")
     producer.flush()
     current_time += timedelta(hours=1)
-    time.sleep(100)
+    time.sleep(EC_PUSH_TIME)
