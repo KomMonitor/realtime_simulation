@@ -7,14 +7,14 @@ networks:
 services:
 
   node-red:
-    image: nodered/node-red:latest
+    image: nodered/node-red:4.1.0-22
     container_name: nodered
     environment:
       - TZ=Europe/Amsterdam
     ports:
       - 1880:1880
     networks:
-      - kommonitor
+      - ${NETWORK_NAME}
     volumes:
       - ./data:/data
 
@@ -44,7 +44,7 @@ services:
     image: hivemq/hivemq-ce:2025.4
     ports:
       - "1883:1883"
-      - "8080:8080"
+      - "9080:8080"
     networks:
       - ${NETWORK_NAME}
 
@@ -66,21 +66,21 @@ services:
     networks:
       - ${NETWORK_NAME}
 
-  pgadmin:
-    image: dpage/pgadmin4:latest
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: admin
-    ports:
-      - "8082:80"
-    depends_on:
-      - timescaledb
-    volumes:
-      - type: bind
-        source: ./servers.json
-        target: /pgadmin4/servers.json
-    networks:
-      - ${NETWORK_NAME}
+  # pgadmin:
+  #   image: dpage/pgadmin4:latest
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: admin@admin.com
+  #     PGADMIN_DEFAULT_PASSWORD: admin
+  #   ports:
+  #     - "8082:80"
+  #   depends_on:
+  #     - timescaledb
+  #   volumes:
+  #     - type: bind
+  #       source: ./servers.json
+  #       target: /pgadmin4/servers.json
+  #   networks:
+  #     - ${NETWORK_NAME}
 
 volumes:
   timescale_data:

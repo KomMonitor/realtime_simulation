@@ -8,68 +8,53 @@ services:
 
   energyconsumption_simulation:
     build: ./energyconsumption_simulation
-    depends_on:
-      - kafka
-      - hivemq
+    profiles: [energyconsumption]
+    environment:
+      - EC_PUSH_TIME=30
     networks:
       - ${NETWORK_NAME}
 
   mobility_simulation:
     build: ./mobility_simulation
-    depends_on:
-      - kafka
-      - hivemq
+    profiles: [mobility]
     networks:
       - ${NETWORK_NAME}
 
   energyconsumption_bridge:
     build: ./energyconsumption_bridge
-    depends_on:
-      - kafka
-      - hivemq
+    profiles: [energyconsumption]
     networks:
       - ${NETWORK_NAME}
 
   mobility_bridge:
     build: ./mobility_bridge
-    depends_on:
-      - kafka
-      - hivemq
+    profiles: [mobility]
     networks:
       - ${NETWORK_NAME}
 
   delivery_simulation:
     build: ./delivery_simulation
-    depends_on:
-      - kafka
-      - hivemq
+    profiles: [delivery]
     networks:
       - ${NETWORK_NAME}
 
   delivery_bridge:
     build: ./delivery_bridge
-    depends_on:
-      - kafka
-      - hivemq
+    profiles: [delivery]
     networks:
       - ${NETWORK_NAME}
 
   energyconsumption_consumer:
     build: ./energyconsumption_consumer
+    profiles: [energyconsumption]
     ports:
       - "5000:5000"
-    depends_on:
-      - kafka
     networks:
       - ${NETWORK_NAME}
 
   mqtt_to_db:
     build: ./mqtt_to_db
-    depends_on:
-      timescaledb:
-        condition: service_healthy
-      hivemq:
-        condition: service_started
+    profiles: [storage]
     environment:
       MQTT_BROKER: hivemq
       MQTT_PORT: "1883"
@@ -84,9 +69,7 @@ services:
 
   delivery_webmap:
     build: ./delivery_webmap
-    depends_on:
-      timescaledb:
-        condition: service_healthy
+    profiles: [delivery]
     environment:
       DB_HOST: timescaledb
       DB_PORT: "5432"
@@ -100,4 +83,3 @@ services:
 
 volumes:
   timescale_data:
-
