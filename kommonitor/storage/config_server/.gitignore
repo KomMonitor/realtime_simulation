@@ -6,3 +6,5 @@
 !.gitignore
 !webClientControlsConfig.json
 !webClientFilterConfig.json
+!webClientAppConfig.js
+!webClientKeycloakConfig.json
