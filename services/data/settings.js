@@ -541,7 +541,8 @@ module.exports = {
      */
     functionGlobalContext: {
         // os:require('os'),
-        turf: require('@turf/turf')
+        turf: require('@turf/turf'),
+        proj4: require('proj4')
     },
 
     /** The maximum number of messages nodes will buffer internally as part of their
