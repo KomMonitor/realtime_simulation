@@ -42,7 +42,6 @@
         "id": "36794d2b76d33f9f",
         "type": "mqtt in",
         "z": "3e78cd8f9d6eb3de",
-        "d": true,
         "name": "",
         "topic": "node-red/stromdaten",
         "qos": "0",
@@ -66,7 +65,7 @@
         "type": "debug",
         "z": "3e78cd8f9d6eb3de",
         "name": "debug 1",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -90,15 +89,14 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 880,
-        "y": 620,
+        "x": 940,
+        "y": 560,
         "wires": []
     },
     {
         "id": "ef7860a4a9927908",
         "type": "inject",
         "z": "3e78cd8f9d6eb3de",
-        "d": true,
         "name": "",
         "props": [
             {
@@ -180,18 +178,18 @@
         "type": "function",
         "z": "3e78cd8f9d6eb3de",
         "name": "Spatial aggregation",
-        "func": "const turf = global.get('turf');\nconst proj4 = global.get('proj4');\n\nvar firstProjection = '+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs';\nvar secondProjection = \"EPSG:4326\";\n\ncontext.data = context.data || {};\n\n//node.warn(msg.topic);\n\nswitch (msg.topic) {\n    case \"daily_average\":\n        context.data.daily_average = msg.payload;\n        //msg = null;\n        break;\n}\n\nconst data = context.data.daily_average;\n\n// Get the polygons stored in the flow context\nconst spatialUnits = flow.get('spatialUnits');\nconst featureCollectionObject = JSON.parse(spatialUnits);\n\n\n// const spatialUnitsCollection = turf.featureCollection(spatialUnits);\nconst bbox = turf.bbox(featureCollectionObject);\n\nif(data != null){\n\n    for (let index1 = 0; index1 < featureCollectionObject.features.length; index1++) {\n\n        const feature = featureCollectionObject.features[index1];\n\n        for (let index = 0; index < data.length; index++) {\n            const element = data[index];\n            const coordsWGS84 = [];\n            const coords = element.geometry.coordinates[0][0];\n            for (let index3 = 0; index3 < coords.length; index3++) {\n                const element = coords[index3];\n                coordsWGS84[index3] = proj4(firstProjection, secondProjection, element);\n            }\n            const polygon = turf.geometry(\"Polygon\", [coordsWGS84]);\n            const contains = turf.booleanContains(feature.geometry, polygon);\n            if (contains) {\n                //node.warn(\"Value: \" + element.mean_consumption_kWh);\n                if (!feature.properties.mean_consumption_kWh) {\n                    feature.properties.mean_consumption_kWh = element.mean_consumption_kWh;\n                } else {\n                    feature.properties.mean_consumption_kWh += element.mean_consumption_kWh;\n                }\n            }\n        }\n        //node.warn(feature.properties.ID + \": \" + feature.properties.mean_consumption_kWh);\n        //break;\n\n    }\n}\n\nmsg.payload = featureCollectionObject;\n\nreturn msg;",
+        "func": "const turf = global.get('turf');\nconst proj4 = global.get('proj4');\n\nvar firstProjection = '+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs';\nvar secondProjection = \"EPSG:4326\";\n\ncontext.data = context.data || {};\n\n//node.warn(msg.topic);\n\nswitch (msg.topic) {\n    case \"daily_average\":\n        context.data.daily_average = msg.payload;\n        //msg = null;\n        break;\n}\n\nconst data = context.data.daily_average;\n\n// Get the polygons stored in the flow context\nconst spatialUnits = flow.get('spatialUnits');\nconst featureCollectionObject = JSON.parse(spatialUnits);\n\n\n// const spatialUnitsCollection = turf.featureCollection(spatialUnits);\nconst bbox = turf.bbox(featureCollectionObject);\n\nif(data != null){\n\n    for (let index1 = 0; index1 < featureCollectionObject.features.length; index1++) {\n\n        const feature = featureCollectionObject.features[index1];\n\n        var stations = 0;\n\n        for (let index = 0; index < data.length; index++) {\n            const element = data[index];\n            const coordsWGS84 = [];\n            const coords = element.geometry.coordinates[0][0];\n            for (let index3 = 0; index3 < coords.length; index3++) {\n                const element = coords[index3];\n                coordsWGS84[index3] = proj4(firstProjection, secondProjection, element);\n            }\n            const polygon = turf.geometry(\"Polygon\", [coordsWGS84]);\n            const contains = turf.booleanContains(feature.geometry, polygon);\n            if (contains) {\n                stations++;\n                //node.warn(\"Value: \" + element.mean_consumption_kWh);\n                if (!feature.properties.sum_mean_consumption_kWh) {\n                    feature.properties.sum_mean_consumption_kWh = element.mean_consumption_kWh;\n                } else {\n                    feature.properties.sum_mean_consumption_kWh += element.mean_consumption_kWh;\n                }\n            }\n        }\n        if (stations > 0) {\n            feature.properties.mean_consumption_kWh = feature.properties.sum_mean_consumption_kWh / stations;\n        }\n        //node.warn(feature.properties.ID + \": \" + feature.properties.mean_consumption_kWh);\n        //break;\n\n    }\n}\n\nmsg.payload = featureCollectionObject;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "// Der Code hier wird ausgeführt,\n// wenn der Node gestartet wird\n// const turf = global.get('turf');",
         "finalize": "",
         "libs": [],
-        "x": 710,
-        "y": 620,
+        "x": 530,
+        "y": 600,
         "wires": [
             [
-                "8ad96aeec0a132ca"
+                "964f670f2f6a5e55"
             ]
         ]
     },
@@ -228,7 +226,6 @@
         "id": "182a9251c3af1403",
         "type": "inject",
         "z": "3e78cd8f9d6eb3de",
-        "d": true,
         "name": "Reset Timer",
         "props": [
             {
@@ -286,7 +283,7 @@
         "type": "debug",
         "z": "3e78cd8f9d6eb3de",
         "name": "debug 4",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -349,6 +346,51 @@
             [
                 "87c075630bf3d04c"
             ]
+        ]
+    },
+    {
+        "id": "964f670f2f6a5e55",
+        "type": "function",
+        "z": "3e78cd8f9d6eb3de",
+        "name": "Create indicator update request",
+        "func": "const featureCollectionObject = msg.payload;\n\nvar indicatorUpdate = {};\n\nindicatorUpdate[\"ownerId\"] = [\"15689dda-e081-42a8-a4e5-153b9cb6477e\"];\nindicatorUpdate[\"applicableSpatialUnit\"] = \"Baublöcke Bochum\";\nindicatorUpdate[\"isPublic\"] = true;\nindicatorUpdate[\"indicatorValues\"] = [];\n\nfor (let index = 0; index < featureCollectionObject.features.length; index++) {\n\n    var indicatorValueElement = {};\n    var feature = featureCollectionObject.features[index];\n    const indicatorValue = feature.properties.mean_consumption_kWh;\n    if(!indicatorValue){\n        continue;\n    }\n    const id = feature.id;\n    const timestamp = feature.properties.validStartDate;\n    indicatorValueElement[\"spatialReferenceKey\"] = id;\n    var valueMapping = {};\n    valueMapping[\"indicatorValue\"] = indicatorValue;\n    valueMapping[\"timestamp\"] = timestamp;\n    indicatorValueElement[\"valueMapping\"] = [valueMapping];\n    indicatorUpdate[\"indicatorValues\"].push(indicatorValueElement);\n}\n\nmsg.payload = indicatorUpdate;\n\nreturn msg;",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 710,
+        "y": 700,
+        "wires": [
+            [
+                "8ad96aeec0a132ca"
+            ],
+            [
+                "94587970ec2d3b09"
+            ]
+        ]
+    },
+    {
+        "id": "94587970ec2d3b09",
+        "type": "http request",
+        "z": "3e78cd8f9d6eb3de",
+        "name": "",
+        "method": "PUT",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://kommonitor-data-management:8085/management/indicators/1b861454-ca20-4333-bd66-e663b07286c0",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 870,
+        "y": 460,
+        "wires": [
+            []
         ]
     }
 ]
