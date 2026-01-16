@@ -16,8 +16,7 @@ services:
     networks:
       - ${NETWORK_NAME}
     volumes:
-      - ./data:/data
-
+      - ./nodered/data:/data
   kafka:
     image: apache/kafka:4.1.0
     ports:

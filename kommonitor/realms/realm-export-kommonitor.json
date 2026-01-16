@@ -143,7 +143,6 @@
       }
     ],
     "client": {
-      "kommonitor-data-management": [],
       "realm-management": [
         {
           "id": "5356eaf0-6e0d-480e-9a6d-84c21556060d",
@@ -357,10 +356,8 @@
         }
       ],
       "kommonitor-importer": [],
-      "kommonitor-web-client": [],
       "security-admin-console": [],
       "kommonitor-processing-scheduler": [],
-      "admin-cli": [],
       "account-console": [],
       "broker": [
         {
@@ -374,6 +371,11 @@
         }
       ],
       "kommonitor-processing-engine": [],
+      "kommonitor-client-config": [],
+      "kommonitor-data-management": [],
+      "kommonitor-web-client": [],
+      "admin-cli": [],
+      "node-red": [],
       "account": [
         {
           "id": "872dd212-6591-49e9-a595-feeab25c6a69",
@@ -461,8 +463,7 @@
           "containerId": "919fb272-a9a5-4899-9713-b93f6cee60d1",
           "attributes": {}
         }
-      ],
-      "kommonitor-client-config": []
+      ]
     }
   },
   "groups": [],
@@ -611,6 +612,25 @@
       "disableableCredentialTypes": [],
       "requiredActions": [],
       "realmRoles": [
+        "default-roles-kommonitor"
+      ],
+      "notBefore": 0,
+      "groups": []
+    },
+    {
+      "id": "c5802385-6920-4ce6-8203-739c41a18518",
+      "username": "service-account-node-red",
+      "emailVerified": false,
+      "enabled": true,
+      "createdTimestamp": 1763632936880,
+      "totp": false,
+      "serviceAccountClientId": "node-red",
+      "disableableCredentialTypes": [],
+      "requiredActions": [
+        "TERMS_AND_CONDITIONS"
+      ],
+      "realmRoles": [
+        "kommonitor-creator",
         "default-roles-kommonitor"
       ],
       "notBefore": 0,
@@ -1505,6 +1525,65 @@
       ]
     },
     {
+      "id": "21bfb1c1-1c3a-4ab6-9feb-2195542f7d22",
+      "clientId": "node-red",
+      "name": "Node-RED",
+      "description": "",
+      "rootUrl": "",
+      "adminUrl": "",
+      "baseUrl": "",
+      "surrogateAuthRequired": false,
+      "enabled": true,
+      "alwaysDisplayInConsole": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "node-red-secret",
+      "redirectUris": [
+        "/*"
+      ],
+      "webOrigins": [
+        "/*"
+      ],
+      "notBefore": 0,
+      "bearerOnly": false,
+      "consentRequired": false,
+      "standardFlowEnabled": false,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": true,
+      "publicClient": false,
+      "frontchannelLogout": true,
+      "protocol": "openid-connect",
+      "attributes": {
+        "realm_client": "false",
+        "oidc.ciba.grant.enabled": "false",
+        "client.secret.creation.time": "1763632936",
+        "backchannel.logout.session.required": "true",
+        "standard.token.exchange.enabled": "false",
+        "frontchannel.logout.session.required": "true",
+        "oauth2.device.authorization.grant.enabled": "false",
+        "display.on.consent.screen": "false",
+        "backchannel.logout.revoke.offline.tokens": "false"
+      },
+      "authenticationFlowBindingOverrides": {},
+      "fullScopeAllowed": true,
+      "nodeReRegistrationTimeout": -1,
+      "defaultClientScopes": [
+        "web-origins",
+        "service_account",
+        "acr",
+        "profile",
+        "roles",
+        "basic",
+        "email"
+      ],
+      "optionalClientScopes": [
+        "address",
+        "phone",
+        "offline_access",
+        "microprofile-jwt"
+      ]
+    },
+    {
       "id": "ab58087d-9911-4a76-9d70-89a422e4f644",
       "clientId": "realm-management",
       "name": "${client_realm-management}",
@@ -2383,14 +2462,14 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
-            "oidc-full-name-mapper",
+            "saml-user-attribute-mapper",
+            "oidc-sha256-pairwise-sub-mapper",
             "oidc-usermodel-property-mapper",
             "saml-role-list-mapper",
             "oidc-address-mapper",
-            "saml-user-attribute-mapper",
-            "oidc-usermodel-attribute-mapper",
             "saml-user-property-mapper",
-            "oidc-sha256-pairwise-sub-mapper"
+            "oidc-full-name-mapper",
+            "oidc-usermodel-attribute-mapper"
           ]
         }
       },
@@ -2414,14 +2493,14 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
-            "oidc-address-mapper",
-            "saml-user-property-mapper",
+            "oidc-usermodel-attribute-mapper",
             "oidc-full-name-mapper",
+            "saml-user-property-mapper",
             "oidc-usermodel-property-mapper",
             "saml-user-attribute-mapper",
-            "oidc-usermodel-attribute-mapper",
             "saml-role-list-mapper",
-            "oidc-sha256-pairwise-sub-mapper"
+            "oidc-sha256-pairwise-sub-mapper",
+            "oidc-address-mapper"
           ]
         }
       },
@@ -3197,7 +3276,7 @@
     "clientSessionMaxLifespan": "0",
     "darkMode": "true"
   },
-  "keycloakVersion": "26.3.1",
+  "keycloakVersion": "26.3.4",
   "userManagedAccessAllowed": false,
   "organizationsEnabled": false,
   "verifiableCredentialsEnabled": false,

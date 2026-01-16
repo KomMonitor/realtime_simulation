@@ -43,7 +43,7 @@ docker compose build
 ## Startup
 ### Starten der Middleware
 Bevor die Realtime Siulation gestartet werden kann, müssen zunächst alle Middleware-Komponenten laufen. Hierzu im
-Verzeichnis [./docker_realtimesimulation](./docker_realtimesimulation) die Komponenten per Docker Compose starten:
+Verzeichnis [./services](./services) die Komponenten per Docker Compose starten:
 ```bash
 docker compose up 
 ```
