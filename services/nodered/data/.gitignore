@@ -8,3 +8,6 @@
 !flows.json
 !package.json
 !settings.js
+
+!kommonitor/
+!kommonitor/config.json

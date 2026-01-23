@@ -1,0 +1,30 @@
+{
+    "indicatorMapping": [
+        {
+            "parameter": "sum_hourly_mean_consumption_kWh",
+            "indicator": "d477b055-9394-48bd-aefa-df488bb1fe20"
+        },
+        {
+            "parameter": "daily_sum_consumption_kWh",
+            "indicator": "6edc32ab-91a9-41d8-a044-b47d88c14d8e"
+        },
+        {
+            "parameter": "hourly_mean_consumption_kWh",
+            "indicator": "1b861454-ca20-4333-bd66-e663b07286c0"
+        },
+        {
+            "parameter": "daily_mean_consumption_kWh",
+            "indicator": "e872f220-2fd1-44d8-a0fb-214310e3d338"
+        }
+    ],
+    "spatialUnits": [
+        {
+            "id": "5e43a840-43ed-4933-bfd6-0a167938bc6d",
+            "name": "Baublöcke Bochum"
+        },
+        {
+            "id": "de6e761b-9288-445b-a32e-dceb4893d000",
+            "name": "Quartiere Bochum"
+        }
+    ]
+}
