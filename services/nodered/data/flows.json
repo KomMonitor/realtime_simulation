@@ -63,7 +63,7 @@
         ],
         "x": 74,
         "y": 679,
-        "w": 1272,
+        "w": 1292,
         "h": 82
     },
     {
@@ -85,6 +85,58 @@
         "y": 799,
         "w": 712,
         "h": 82
+    },
+    {
+        "id": "c6fea38fa195fa13",
+        "type": "group",
+        "z": "3e78cd8f9d6eb3de",
+        "name": "Request and Store Spatial Units",
+        "style": {
+            "fill": "#ffefbf",
+            "label": true,
+            "color": "#000000"
+        },
+        "nodes": [
+            "ef7860a4a9927908",
+            "fbcbeceefd8aeed6",
+            "4948b44c2c3e7ff2",
+            "45508302af783210",
+            "62dd949a0616d56c",
+            "b77205f1c319b0d5"
+        ],
+        "x": 74,
+        "y": 499,
+        "w": 1292,
+        "h": 142
+    },
+    {
+        "id": "6a7d40c140d90700",
+        "type": "group",
+        "z": "3e78cd8f9d6eb3de",
+        "name": "Aggregate Energy Consumption",
+        "style": {
+            "fill": "#e3f3d3",
+            "label": true,
+            "color": "#000000"
+        },
+        "nodes": [
+            "36794d2b76d33f9f",
+            "61cc68e6876f86ac",
+            "e729ef7d4bc07cd4",
+            "182a9251c3af1403",
+            "d2443d2313132c87",
+            "91edeecdf16ee7db",
+            "87c075630bf3d04c",
+            "8b3e61e6ff87d6b1",
+            "94587970ec2d3b09",
+            "4f1b27b605c76d52",
+            "f7b7c68b2edab80c",
+            "80bb1be83346cca8"
+        ],
+        "x": 74,
+        "y": 199,
+        "w": 1952,
+        "h": 262
     },
     {
         "id": "7e1a2f9059f99060",
@@ -203,58 +255,6 @@
         "y": 599,
         "w": 1158,
         "h": 82
-    },
-    {
-        "id": "c6fea38fa195fa13",
-        "type": "group",
-        "z": "3e78cd8f9d6eb3de",
-        "name": "Request and Store Spatial Units",
-        "style": {
-            "fill": "#ffefbf",
-            "label": true,
-            "color": "#000000"
-        },
-        "nodes": [
-            "ef7860a4a9927908",
-            "fbcbeceefd8aeed6",
-            "4948b44c2c3e7ff2",
-            "45508302af783210",
-            "62dd949a0616d56c",
-            "b77205f1c319b0d5"
-        ],
-        "x": 74,
-        "y": 499,
-        "w": 1272,
-        "h": 142
-    },
-    {
-        "id": "6a7d40c140d90700",
-        "type": "group",
-        "z": "3e78cd8f9d6eb3de",
-        "name": "Aggregate Energy Consumption",
-        "style": {
-            "fill": "#e3f3d3",
-            "label": true,
-            "color": "#000000"
-        },
-        "nodes": [
-            "36794d2b76d33f9f",
-            "61cc68e6876f86ac",
-            "e729ef7d4bc07cd4",
-            "182a9251c3af1403",
-            "d2443d2313132c87",
-            "91edeecdf16ee7db",
-            "87c075630bf3d04c",
-            "8b3e61e6ff87d6b1",
-            "94587970ec2d3b09",
-            "4f1b27b605c76d52",
-            "f7b7c68b2edab80c",
-            "80bb1be83346cca8"
-        ],
-        "x": 74,
-        "y": 199,
-        "w": 1892,
-        "h": 262
     },
     {
         "id": "2f77256570dcc565",
@@ -385,7 +385,7 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 730,
+        "x": 710,
         "y": 600,
         "wires": [
             [
@@ -527,7 +527,7 @@
         "z": "3e78cd8f9d6eb3de",
         "g": "6a7d40c140d90700",
         "name": "Daily Aggregation",
-        "func": "const data = msg.payload;\n\nconst dailyData = data.reduce((acc, current) => {\n    if (current.FID != undefined) {\n\n        const id = current.FID;\n\n        if (!acc[id]) {\n\n            // Copy all properties from the current value\n            acc[id] = { ...current };\n            delete acc[id].consumption_kWh;\n            acc[id].daily_sum_consumption_kWh = current.consumption_kWh;\n            acc[id].count = 1;\n\n            // Fetch the aggregation timestamp\n            acc[id].timestamp = msg.aggregation_time.slice(0, 10);\n        } else {\n            // If this FID already exists, add to the values\n            acc[id].daily_sum_consumption_kWh += current.consumption_kWh;\n            acc[id].count += 1;\n        }\n\n        return acc;\n    }\n}, {});\n\n// Calc the mean\nconst finalResult = Object.values(dailyData).map(item => {\n    item.hourly_mean_consumption_kWh = item.daily_sum_consumption_kWh / item.count;\n    return item;\n});\n\nmsg.payload = Object.values(dailyData);\nmsg.topic = \"daily_aggregation\"\n\nreturn msg;",
+        "func": "const data = msg.payload;\nmsg.timestamp = msg.aggregation_time.slice(0, 10);\n \nconst dailyData = data.reduce((acc, current) => {\n    if (current.FID != undefined) {\n\n        const id = current.FID;\n\n        if (!acc[id]) {\n\n            // Copy all properties from the current value\n            acc[id] = { ...current };\n            delete acc[id].consumption_kWh;\n            acc[id].daily_sum_consumption_kWh = current.consumption_kWh;\n            acc[id].count = 1;\n\n            // Fetch the aggregation timestamp\n            acc[id].timestamp = msg.timestamp;\n        } else {\n            // If this FID already exists, add to the values\n            acc[id].daily_sum_consumption_kWh += current.consumption_kWh;\n            acc[id].count += 1;\n        }\n\n        return acc;\n    }\n}, {});\n\n// Calc the mean\nconst finalResult = Object.values(dailyData).map(item => {\n    item.hourly_mean_consumption_kWh = item.daily_sum_consumption_kWh / item.count;\n    return item;\n});\n\nmsg.payload = Object.values(dailyData);\nmsg.topic = \"daily_aggregation\"\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -594,7 +594,7 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 1520,
+        "x": 1580,
         "y": 300,
         "wires": [
             [
@@ -686,7 +686,7 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1780,
+        "x": 1840,
         "y": 300,
         "wires": []
     },
@@ -736,7 +736,9 @@
         "x": 670,
         "y": 840,
         "wires": [
-            []
+            [
+                "aabd23a47dbc094c"
+            ]
         ]
     },
     {
@@ -752,10 +754,12 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1220,
+        "x": 1240,
         "y": 720,
         "wires": [
-            []
+            [
+                "3f83ed949166b5de"
+            ]
         ]
     },
     {
@@ -775,6 +779,7 @@
         "y": 720,
         "wires": [
             [
+                "e412e7e122327f7f",
                 "cbb68c6f79fedca3"
             ]
         ]
@@ -819,7 +824,7 @@
         "gap": "",
         "start": "",
         "inout": "out",
-        "septopics": true,
+        "septopics": false,
         "property": "payload",
         "topi": "topic",
         "x": 710,
@@ -839,7 +844,7 @@
         "property": "payload",
         "action": "",
         "pretty": false,
-        "x": 950,
+        "x": 970,
         "y": 720,
         "wires": [
             [
@@ -852,15 +857,15 @@
         "type": "function",
         "z": "3e78cd8f9d6eb3de",
         "g": "6a7d40c140d90700",
-        "name": "Create indicator update request",
-        "func": "const featureCollectionObject = msg.payload;\n\nvar outputMsgs = [];\nlet config = flow.get('kommonitorConfig');\n\nconfig.indicatorMapping.forEach((element) => {\n    var indicatorUpdate = {};\n\n    indicatorUpdate[\"ownerId\"] = \"15689dda-e081-42a8-a4e5-153b9cb6477e\";\n    indicatorUpdate[\"permissions\"] = [];\n    indicatorUpdate[\"applicableSpatialUnit\"] = \"Baublöcke Bochum\";\n    indicatorUpdate[\"isPublic\"] = true;\n    indicatorUpdate[\"indicatorValues\"] = [];\n    for (let index = 0; index < featureCollectionObject.features.length; index++) {\n\n        var indicatorValueElement = {};\n        var feature = featureCollectionObject.features[index];\n        const indicatorValue = feature.properties[element.parameter];\n        if (!indicatorValue) {\n            continue;\n        }\n        const id = feature.properties.ID;\n        const timestamp = feature.properties.validStartDate;\n        indicatorValueElement[\"spatialReferenceKey\"] = id;\n        var valueMapping = {};\n        valueMapping[\"indicatorValue\"] = indicatorValue;\n        valueMapping[\"timestamp\"] = timestamp;\n        indicatorValueElement[\"valueMapping\"] = [valueMapping];\n        indicatorUpdate[\"indicatorValues\"].push(indicatorValueElement);\n    }\n    if (indicatorUpdate[\"indicatorValues\"].length) {\n        var msg = {\n            'baseUrl': env.get(\"KOMMONITOR_DATA_MANAGEMENT_URL\"),\n            'payload': indicatorUpdate,\n            'headers': {\n                Authorization: \"Bearer \" + flow.get('accessToken')\n            },\n            'indicator': element.indicator\n        }\n        outputMsgs.push(msg);\n    }\n});\n\nreturn [outputMsgs];",
+        "name": "Create multiple indicator update request",
+        "func": "const featureCollectionObject = msg.payload;\nconst timestamp = msg.timestamp;\n\nvar outputMsgs = [];\nlet config = flow.get('kommonitorConfig');\n\nconfig.indicatorMapping.forEach((element) => {\n    var indicatorUpdate = {};\n\n    indicatorUpdate[\"ownerId\"] = \"15689dda-e081-42a8-a4e5-153b9cb6477e\";\n    indicatorUpdate[\"permissions\"] = [];\n    indicatorUpdate[\"applicableSpatialUnit\"] = \"Baublöcke Bochum\";\n    indicatorUpdate[\"isPublic\"] = true;\n    indicatorUpdate[\"indicatorValues\"] = [];\n    for (let index = 0; index < featureCollectionObject.features.length; index++) {\n\n        var indicatorValueElement = {};\n        var feature = featureCollectionObject.features[index];\n        const indicatorValue = feature.properties[element.parameter];\n        if (!indicatorValue) {\n            continue;\n        }\n        const id = feature.properties.ID;\n        // const timestamp = feature.properties.validStartDate;        \n        indicatorValueElement[\"spatialReferenceKey\"] = id;\n        var valueMapping = {};\n        valueMapping[\"indicatorValue\"] = indicatorValue;\n        // valueMapping[\"timestamp\"] = timestamp;\n        valueMapping[\"timestamp\"] = timestamp;\n        indicatorValueElement[\"valueMapping\"] = [valueMapping];\n        indicatorUpdate[\"indicatorValues\"].push(indicatorValueElement);\n    }\n    if (indicatorUpdate[\"indicatorValues\"].length) {\n        var msg = {\n            'baseUrl': env.get(\"KOMMONITOR_DATA_MANAGEMENT_URL\"),\n            'payload': indicatorUpdate,\n            'headers': {\n                Authorization: \"Bearer \" + flow.get('accessToken')\n            },\n            'indicator': element.indicator\n        }\n        outputMsgs.push(msg);\n    }\n});\n\nreturn [outputMsgs];",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1270,
+        "x": 1300,
         "y": 300,
         "wires": [
             [
@@ -920,10 +925,12 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1220,
+        "x": 1240,
         "y": 600,
         "wires": [
-            []
+            [
+                "9efa8545b3f47eb4"
+            ]
         ]
     },
     {
@@ -949,7 +956,7 @@
         "z": "3e78cd8f9d6eb3de",
         "g": "6a7d40c140d90700",
         "name": "Loop for Spatial Units",
-        "func": "const data = msg;\nlet spatialUnits = flow.get('spatialUnits');\nvar output = [];\n\nspatialUnits.forEach((su) => {\n    var msg = {};\n    msg.topic = data.topic;\n    msg.payload = data.payload;\n    msg.spatialUnit = su.id;\n    msg.features = su.features;\n    output.push(msg);\n});\nreturn [output];",
+        "func": "const data = msg;\nlet spatialUnits = flow.get('spatialUnits');\nvar output = [];\n\nspatialUnits.forEach((su) => {\n    var msg = {};\n    msg.topic = data.topic;\n    msg.payload = data.payload;\n    msg.spatialUnit = su.id;\n    msg.features = su.features;\n    msg.timestamp = data.timestamp;\n    output.push(msg);\n});\nreturn [output];",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -963,6 +970,57 @@
                 "61cc68e6876f86ac"
             ]
         ]
+    },
+    {
+        "id": "9efa8545b3f47eb4",
+        "type": "debug",
+        "z": "3e78cd8f9d6eb3de",
+        "name": "Debug Spatial Units",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1520,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "3f83ed949166b5de",
+        "type": "debug",
+        "z": "3e78cd8f9d6eb3de",
+        "name": "Debug Config File",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1510,
+        "y": 720,
+        "wires": []
+    },
+    {
+        "id": "aabd23a47dbc094c",
+        "type": "debug",
+        "z": "3e78cd8f9d6eb3de",
+        "name": "Debug Token",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "oauth2Response",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 910,
+        "y": 840,
+        "wires": []
     },
     {
         "id": "715ae02.ffcb82",
