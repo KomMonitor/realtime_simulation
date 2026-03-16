@@ -4,7 +4,6 @@
 
 # ... except for this one.
 !.gitignore
-!flows_cred.json
 !flows.json
 !package.json
 !settings.js

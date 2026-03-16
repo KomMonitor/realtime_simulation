@@ -8,41 +8,12 @@
         "env": []
     },
     {
-        "id": "3ae5b155929f3a25",
+        "id": "c0dc0e174b7cfcb9",
         "type": "tab",
-        "label": "Flow 3",
+        "label": "Flow 2",
         "disabled": false,
         "info": "",
         "env": []
-    },
-    {
-        "id": "d15d33a4fa9a8ad9",
-        "type": "tab",
-        "label": "node-red-contrib-oauth2",
-        "disabled": false,
-        "info": "",
-        "env": []
-    },
-    {
-        "id": "368ef084fe6b53de",
-        "type": "group",
-        "z": "d15d33a4fa9a8ad9",
-        "name": "Grant Type",
-        "style": {
-            "label": true,
-            "fill": "#bfc7d7",
-            "color": "#0070c0"
-        },
-        "nodes": [
-            "7e1a2f9059f99060",
-            "54025cb0a19e0f14",
-            "f37b3410d0e03c57",
-            "a783ce686ac81a0c"
-        ],
-        "x": 48,
-        "y": 33,
-        "w": 1264,
-        "h": 700
     },
     {
         "id": "e452729c049eacae",
@@ -128,133 +99,15 @@
             "91edeecdf16ee7db",
             "87c075630bf3d04c",
             "8b3e61e6ff87d6b1",
-            "94587970ec2d3b09",
             "4f1b27b605c76d52",
             "f7b7c68b2edab80c",
-            "80bb1be83346cca8"
+            "80bb1be83346cca8",
+            "94587970ec2d3b09"
         ],
         "x": 74,
         "y": 199,
         "w": 1952,
         "h": 262
-    },
-    {
-        "id": "7e1a2f9059f99060",
-        "type": "group",
-        "z": "d15d33a4fa9a8ad9",
-        "g": "368ef084fe6b53de",
-        "name": "REFRESH",
-        "style": {
-            "label": true,
-            "stroke": "#7f7f7f",
-            "color": "#000000",
-            "fill": "#bfdbef"
-        },
-        "nodes": [
-            "d1ba341040cea0c3",
-            "aa24d69faa1640cd",
-            "efd1a2a910ca1051",
-            "a8fca004e704e071",
-            "9e9332c792dbdc01",
-            "7f22873286146e83"
-        ],
-        "x": 76,
-        "y": 499,
-        "w": 1210,
-        "h": 208
-    },
-    {
-        "id": "54025cb0a19e0f14",
-        "type": "group",
-        "z": "d15d33a4fa9a8ad9",
-        "g": "368ef084fe6b53de",
-        "name": "Client Credentials",
-        "style": {
-            "label": true,
-            "stroke": "#a4a4a4",
-            "color": "#ffffff",
-            "fill": "#3f93cf"
-        },
-        "nodes": [
-            "10de26226e66ea9e",
-            "147aae5c70a7eecb",
-            "1e2169485cd2be43",
-            "ca6a8cddea946ab2",
-            "c6d4eb5c867902eb",
-            "d7a2041ef2683870",
-            "3f5a09c4fc8e769f"
-        ],
-        "x": 74,
-        "y": 179,
-        "w": 1212,
-        "h": 142
-    },
-    {
-        "id": "f37b3410d0e03c57",
-        "type": "group",
-        "z": "d15d33a4fa9a8ad9",
-        "g": "368ef084fe6b53de",
-        "name": "Authorization Code",
-        "style": {
-            "label": true,
-            "fill": "#3f93cf",
-            "color": "#ffffff"
-        },
-        "nodes": [
-            "8bd177259bc473f4",
-            "ee86852f62926632",
-            "d340377991d2d9b9",
-            "9e4d3edfde1766b9"
-        ],
-        "x": 74,
-        "y": 59,
-        "w": 1212,
-        "h": 82
-    },
-    {
-        "id": "a783ce686ac81a0c",
-        "type": "group",
-        "z": "d15d33a4fa9a8ad9",
-        "g": "368ef084fe6b53de",
-        "name": "Password",
-        "style": {
-            "label": true,
-            "fill": "#3f93cf",
-            "color": "#ffffff"
-        },
-        "nodes": [
-            "5ff7fb2616706080",
-            "8eadc61e4e5b4ac2",
-            "d857d0bc3e90d394",
-            "95745c4253c151f0",
-            "dcbde702eae7191d",
-            "d6a9695a923ab18b",
-            "c5da03044bdca6f1"
-        ],
-        "x": 74,
-        "y": 339,
-        "w": 1212,
-        "h": 142
-    },
-    {
-        "id": "7f22873286146e83",
-        "type": "group",
-        "z": "d15d33a4fa9a8ad9",
-        "g": "7e1a2f9059f99060",
-        "name": "via HTTP REQUEST",
-        "style": {
-            "label": true
-        },
-        "nodes": [
-            "64d9243f.b7be7c",
-            "31727a2c.05a026",
-            "4030c52c.c2c29c",
-            "3b67977c.a53c08"
-        ],
-        "x": 102,
-        "y": 599,
-        "w": 1158,
-        "h": 82
     },
     {
         "id": "2f77256570dcc565",
@@ -310,9 +163,45 @@
                 "name": "KOMMONITOR_DATA_MANAGEMENT_URL",
                 "value": "http://kommonitor-data-management:8085",
                 "type": "str"
+            },
+            {
+                "name": "KOMMONITOR_TIMESERIES_API_URL",
+                "value": "http://kommonitor-timeseries-management:8086",
+                "type": "str"
             }
         ],
         "modules": {}
+    },
+    {
+        "id": "194992c8558abaa1",
+        "type": "mqtt-broker",
+        "name": "Münster Klima",
+        "broker": "datahub.digital",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
     },
     {
         "id": "36794d2b76d33f9f",
@@ -574,31 +463,6 @@
         "wires": [
             [
                 "87c075630bf3d04c"
-            ]
-        ]
-    },
-    {
-        "id": "94587970ec2d3b09",
-        "type": "http request",
-        "z": "3e78cd8f9d6eb3de",
-        "g": "6a7d40c140d90700",
-        "name": "Update Indicator",
-        "method": "PUT",
-        "ret": "txt",
-        "paytoqs": "ignore",
-        "url": "{{{baseUrl}}}/management/indicators/{{{indicator}}}",
-        "tls": "",
-        "persist": false,
-        "proxy": "",
-        "insecureHTTPParser": false,
-        "authType": "",
-        "senderr": false,
-        "headers": [],
-        "x": 1580,
-        "y": 300,
-        "wires": [
-            [
-                "4f1b27b605c76d52"
             ]
         ]
     },
@@ -1023,473 +887,15 @@
         "wires": []
     },
     {
-        "id": "715ae02.ffcb82",
-        "type": "function",
-        "z": "3ae5b155929f3a25",
-        "name": "Wait for all tasks to finish",
-        "func": "context.data = context.data || new Object();\n\nswitch (msg.topic) {\n    case \"task1\":\n        context.data.task1 = msg.payload;\n        msg = null;\n        break;\n    case \"task2\":\n        context.data.task2 = msg.payload;\n        msg = null;\n        break;\n    case \"task3\":\n        context.data.task3 = msg.payload;\n        msg = null;\n        break;\n        \n    default:\n        msg = null;\n    \tbreak;\n\n}\n\nif(context.data.task1 != null && context.data.task2 != null && context.data.task3 != null) {\n\tmsg2 = new Object();\n    msg2 = context.data;\n    context.data=null;\n\treturn msg2;\n} else return msg;",
-        "outputs": 1,
-        "x": 950,
-        "y": 620,
-        "wires": [
-            [
-                "1db3a013.cd5468"
-            ]
-        ]
-    },
-    {
-        "id": "33b2850d.f24e6a",
-        "type": "delay",
-        "z": "3ae5b155929f3a25",
-        "name": "Random delay",
-        "pauseType": "random",
-        "timeout": "5",
-        "timeoutUnits": "seconds",
-        "rate": "1",
-        "rateUnits": "second",
-        "randomFirst": "1",
-        "randomLast": "5",
-        "randomUnits": "seconds",
-        "drop": false,
-        "outputs": 1,
-        "x": 692,
-        "y": 529,
-        "wires": [
-            [
-                "715ae02.ffcb82"
-            ]
-        ]
-    },
-    {
-        "id": "1db3a013.cd5468",
-        "type": "debug",
-        "z": "3ae5b155929f3a25",
-        "name": "",
-        "active": true,
-        "console": "false",
-        "complete": "true",
-        "x": 1157,
-        "y": 619,
-        "wires": []
-    },
-    {
-        "id": "35eb6e77.0f77da",
-        "type": "delay",
-        "z": "3ae5b155929f3a25",
-        "name": "Random delay",
-        "pauseType": "random",
-        "timeout": "5",
-        "timeoutUnits": "seconds",
-        "rate": "1",
-        "rateUnits": "second",
-        "randomFirst": "1",
-        "randomLast": "5",
-        "randomUnits": "seconds",
-        "drop": false,
-        "outputs": 1,
-        "x": 696,
-        "y": 625,
-        "wires": [
-            [
-                "715ae02.ffcb82"
-            ]
-        ]
-    },
-    {
-        "id": "c8ab7682.98ada",
-        "type": "delay",
-        "z": "3ae5b155929f3a25",
-        "name": "Random delay",
-        "pauseType": "random",
-        "timeout": "5",
-        "timeoutUnits": "seconds",
-        "rate": "1",
-        "rateUnits": "second",
-        "randomFirst": "1",
-        "randomLast": "5",
-        "randomUnits": "seconds",
-        "drop": false,
-        "outputs": 1,
-        "x": 693,
-        "y": 709,
-        "wires": [
-            [
-                "715ae02.ffcb82"
-            ]
-        ]
-    },
-    {
-        "id": "1ccffde6.02aa52",
-        "type": "function",
-        "z": "3ae5b155929f3a25",
-        "name": "Task1",
-        "func": "msg.topic=\"task1\";\nmsg.payload=\"Task1's payload\"\nreturn msg;",
-        "outputs": 1,
-        "x": 524,
-        "y": 529,
-        "wires": [
-            [
-                "33b2850d.f24e6a"
-            ]
-        ]
-    },
-    {
-        "id": "fe4cbb39.4f93c8",
-        "type": "function",
-        "z": "3ae5b155929f3a25",
-        "name": "Task2",
-        "func": "msg.topic=\"task2\";\nmsg.payload=\"Task2's payload\"\nreturn msg;",
-        "outputs": 1,
-        "x": 527,
-        "y": 624,
-        "wires": [
-            [
-                "35eb6e77.0f77da"
-            ]
-        ]
-    },
-    {
-        "id": "c3766a5d.afab88",
-        "type": "function",
-        "z": "3ae5b155929f3a25",
-        "name": "Task3",
-        "func": "msg.topic=\"task3\";\nmsg.payload=\"Task3's payload\"\nreturn msg;",
-        "outputs": 1,
-        "x": 522,
-        "y": 708,
-        "wires": [
-            [
-                "c8ab7682.98ada"
-            ]
-        ]
-    },
-    {
-        "id": "2dc185ba.57852a",
-        "type": "inject",
-        "z": "3ae5b155929f3a25",
-        "name": "Start",
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "topic": "",
-        "payload": "",
-        "payloadType": "none",
-        "x": 358,
-        "y": 613,
-        "wires": [
-            [
-                "1ccffde6.02aa52",
-                "fe4cbb39.4f93c8",
-                "c3766a5d.afab88"
-            ]
-        ]
-    },
-    {
-        "id": "ee86852f62926632",
-        "type": "oauth2",
-        "z": "d15d33a4fa9a8ad9",
-        "g": "f37b3410d0e03c57",
-        "name": "Authorization Code",
-        "container": "oauth2Response",
-        "grant_type": "authorization_code",
-        "access_token_url": "http://localhost:8080/v1/oauth/tokens",
-        "authorization_endpoint": "http://localhost:8080/web/authorize",
-        "redirect_uri": "/oauth2/redirect_uri",
-        "open_authentication": "c9cf92ea-6f1d-44b6-86ed-6de1279f45d8",
-        "username": "",
-        "password": "",
-        "client_id": "test_client_1",
-        "client_secret": "test_secret",
-        "scope": "read_write",
-        "client_credentials_in_body": false,
-        "rejectUnauthorized": true,
-        "headers": {},
-        "x": 450,
-        "y": 100,
-        "wires": [
-            [
-                "8bd177259bc473f4"
-            ]
-        ]
-    },
-    {
-        "id": "9e4d3edfde1766b9",
-        "type": "inject",
-        "z": "d15d33a4fa9a8ad9",
-        "g": "f37b3410d0e03c57",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 180,
-        "y": 100,
-        "wires": [
-            [
-                "ee86852f62926632"
-            ]
-        ]
-    },
-    {
-        "id": "d7a2041ef2683870",
-        "type": "debug",
-        "z": "d15d33a4fa9a8ad9",
-        "g": "54025cb0a19e0f14",
-        "name": "DBG 2",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1190,
-        "y": 220,
-        "wires": []
-    },
-    {
-        "id": "c6d4eb5c867902eb",
-        "type": "oauth2",
-        "z": "d15d33a4fa9a8ad9",
-        "g": "54025cb0a19e0f14",
-        "name": "Client Credentials",
-        "container": "oauth2Response",
-        "grant_type": "client_credentials",
-        "access_token_url": "http://localhost:8080/v1/oauth/tokens",
-        "authorization_endpoint": "http://localhost:8080/web/authorize",
-        "redirect_uri": "/oauth2/redirect_uri",
-        "open_authentication": "41595d3b-a2b5-41aa-84e7-02d2c7b54304",
-        "username": "",
-        "password": "",
-        "client_id": "test_client_1",
-        "client_secret": "test_secret",
-        "scope": "read_write",
-        "client_credentials_in_body": false,
-        "rejectUnauthorized": true,
-        "headers": {},
-        "x": 450,
-        "y": 220,
-        "wires": [
-            [
-                "1e2169485cd2be43"
-            ]
-        ]
-    },
-    {
-        "id": "3f5a09c4fc8e769f",
-        "type": "inject",
-        "z": "d15d33a4fa9a8ad9",
-        "g": "54025cb0a19e0f14",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 180,
-        "y": 220,
-        "wires": [
-            [
-                "c6d4eb5c867902eb"
-            ]
-        ]
-    },
-    {
-        "id": "d1ba341040cea0c3",
-        "type": "inject",
-        "z": "d15d33a4fa9a8ad9",
-        "g": "7e1a2f9059f99060",
-        "name": "Refresh Token",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "3300",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 208,
-        "y": 540,
-        "wires": [
-            [
-                "aa24d69faa1640cd"
-            ]
-        ]
-    },
-    {
-        "id": "aa24d69faa1640cd",
-        "type": "function",
-        "z": "d15d33a4fa9a8ad9",
-        "g": "7e1a2f9059f99060",
-        "name": "set msg.oauth2Request",
-        "func": "let refreshToken = global.get('refreshToken');\n\nmsg.oauth2Request = { \n    \"access_token_url\": \"http://localhost:8080/v1/oauth/tokens\",\n    \"credentials\": {\n        \"grant_type\": \"refresh_token\",\n        \"client_id\": \"test_client_1\",\n        \"client_secret\": \"test_secret\",\n        \"scope\": \"read_write\",\n        \"refresh_token\": refreshToken   \n    },\n};\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 438,
-        "y": 540,
-        "wires": [
-            [
-                "efd1a2a910ca1051"
-            ]
-        ]
-    },
-    {
-        "id": "efd1a2a910ca1051",
-        "type": "oauth2",
-        "z": "d15d33a4fa9a8ad9",
-        "g": "7e1a2f9059f99060",
-        "name": "Set by msg.oauth2Request",
-        "container": "oauth2Response",
-        "grant_type": "set_by_credentials",
-        "access_token_url": "http://localhost:3000/oauth/token ",
-        "redirect_uri": "http://localhost:1880/oauth2/redirect",
-        "username": "pedroet",
-        "password": "",
-        "client_id": "confidentialApplication",
-        "client_secret": "topSecret",
-        "scope": "*",
-        "headers": {},
-        "x": 708,
-        "y": 540,
-        "wires": [
-            [
-                "a8fca004e704e071"
-            ]
-        ]
-    },
-    {
-        "id": "a8fca004e704e071",
-        "type": "function",
-        "z": "d15d33a4fa9a8ad9",
-        "g": "7e1a2f9059f99060",
-        "name": "Set refreshToken",
-        "func": "if (msg.oauth2Response.refresh_token) {\n    global.set('refreshToken', msg.oauth2Response.refresh_token);\n}\nif (msg.oauth2Response.access_token) {\n    global.set('accessToken', msg.oauth2Response.access_token);\n}\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 978,
-        "y": 540,
-        "wires": [
-            [
-                "9e9332c792dbdc01"
-            ]
-        ]
-    },
-    {
-        "id": "9e9332c792dbdc01",
-        "type": "debug",
-        "z": "d15d33a4fa9a8ad9",
-        "g": "7e1a2f9059f99060",
-        "name": "DBG 2",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1187,
-        "y": 540,
-        "wires": []
-    },
-    {
-        "id": "4030c52c.c2c29c",
-        "type": "inject",
-        "z": "d15d33a4fa9a8ad9",
-        "g": "7f22873286146e83",
-        "name": "Refresh Token",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 218,
-        "y": 640,
-        "wires": [
-            [
-                "31727a2c.05a026"
-            ]
-        ]
-    },
-    {
-        "id": "31727a2c.05a026",
-        "type": "function",
-        "z": "d15d33a4fa9a8ad9",
-        "g": "7f22873286146e83",
-        "name": "SETTING REQUEST",
-        "func": "var REFRESH_TOKEN = global.get('refreshToken');\nvar ACCESS_TOKEN = global.get('accessToken');\n\nmsg.method = \"POST\"\nmsg.url = `http://localhost:8080/v1/oauth/tokens?grant_type=refresh_token&refresh_token=${REFRESH_TOKEN}`\n\nmsg.headers = {}\nmsg.headers[\"content-type\"] = \"application/json\"\nmsg.headers[\"Authorization\"] = 'Basic ' + Buffer.from('test_client_1:test_secret').toString('base64');\n\nreturn msg",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 468,
-        "y": 640,
-        "wires": [
-            [
-                "64d9243f.b7be7c"
-            ]
-        ]
-    },
-    {
-        "id": "64d9243f.b7be7c",
+        "id": "94587970ec2d3b09",
         "type": "http request",
-        "z": "d15d33a4fa9a8ad9",
-        "g": "7f22873286146e83",
-        "name": "",
-        "method": "use",
-        "ret": "obj",
+        "z": "3e78cd8f9d6eb3de",
+        "g": "6a7d40c140d90700",
+        "name": "Update Indicator",
+        "method": "PUT",
+        "ret": "txt",
         "paytoqs": "ignore",
-        "url": "",
+        "url": "{{{baseUrl}}}/management/indicators/{{{indicator}}}",
         "tls": "",
         "persist": false,
         "proxy": "",
@@ -1497,20 +903,93 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 798,
-        "y": 640,
+        "x": 1580,
+        "y": 300,
         "wires": [
             [
-                "3b67977c.a53c08"
+                "4f1b27b605c76d52"
             ]
         ]
     },
     {
-        "id": "3b67977c.a53c08",
+        "id": "b4e3b72012c2d301",
+        "type": "inject",
+        "z": "c0dc0e174b7cfcb9",
+        "name": "Inject Test Data",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "aggregation_time",
+                "v": "iso",
+                "vt": "date"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{\"tags\":[\"\"],\"source_time\":\"2026-02-12T10:29:52.937372Z\",\"source_id\":\"5\",\"source_data\":{\"updated_at\":\"2026-02-12T10:29:52.937372\",\"uid\":\"6b63e228-1d28-4f2d-8ed9-603d596b03a0\",\"spreading_factor\":7,\"server_data\":{\"size\":24,\"raw\":\"QLpewimAAzACfE2pEh+8OkMBvZqE8Psw\",\"mtype\":\"unconfirmed_data_up\",\"modu\":\"LORA\",\"mic_pass\":true,\"mac_cmds\":[],\"gwrx\":[{\"tmst\":202967012,\"time\":\"2026-02-12T10:29:51.247088Z\",\"stat\":{\"long\":7.5277,\"lati\":51.9178,\"alti\":75},\"srv_rcv_time\":1770892191597088,\"rxtime\":\"2026-02-12T10:29:51.247088Z\",\"rxoffset\":350,\"rssi\":-100,\"lsnr\":10,\"gweui\":\"FCC23DFFFE2DC370\"},{\"tmst\":212325316,\"time\":\"2026-02-12T10:29:51.565106Z\",\"stat\":{\"long\":7.5553,\"lati\":51.924301,\"alti\":66},\"srv_rcv_time\":1770892191575136,\"rxtime\":\"2026-02-12T10:29:51.565106Z\",\"rxoffset\":10,\"rssi\":-118,\"lsnr\":-0.5,\"gweui\":\"0016C001FF10C76B\"}],\"freq\":867.7,\"fopts\":\"\",\"dev_addr_hex\":\"29c25eba\",\"datr\":\"SF7BW125\",\"codr\":\"4/5\",\"chan\":6},\"raw_payload\":\"40BA5EC229800330027C4DA9121FBC3A4301BD9A84F0FB30\",\"port\":2,\"payload_encrypted\":false,\"payload\":\"00007FFF000000004F03DD\",\"parsed_packet\":{\"port\":2,\"pending\":false,\"mtype\":\"unconfirmed_data_up\",\"mic_pass\":true,\"major\":0,\"mac_cmds\":[],\"fopts_len\":0,\"fcnt\":12291,\"dir\":\"up\",\"dev_addr_hex\":\"29c25eba\",\"adrackreq\":false,\"adr\":true,\"ack\":false},\"parsed\":{\"temperature\":3276.7,\"digitalInput\":0,\"battery\":0,\"adc\":0,\"Temperatur\":7.9,\"Luftfeuchte\":98.9},\"organization_id\":5,\"organization\":{},\"mic_pass\":true,\"location\":null,\"inserted_at\":\"2026-02-12T10:29:52.937372\",\"frame_counter\":77827,\"device_id\":117649,\"device_class\":null,\"device\":{\"organization_id\":5,\"name\":\"Stadt Temperatur 1028 Kleine Breikamp\",\"id\":117649,\"eui\":\"A84041CC2A590037\",\"device_class_id\":null,\"address\":\"29C25EBA\"},\"bandwidth\":125,\"ack\":false},\"source\":\"firefly\",\"signal\":{\"snr\":10,\"rssi\":-100,\"gateway\":\"FCC23DFFFE2DC370\"},\"payload\":\"00007FFF000000004F03DD\",\"parser_name\":null,\"parsed_tags\":null,\"parsed\":{\"temperature\":3276.7,\"digitalInput\":0,\"battery\":0,\"adc\":0,\"Temperatur\":7.9,\"Luftfeuchte\":98.9},\"lora\":{\"spreading_factor\":7,\"fport\":2},\"geo_info\":{\"lon\":\"7.522316\",\"lat\":\"51.917603\",\"address\":\"Hafenpl. 1, 48155 Münster, Germany\"},\"eui\":\"A84041CC2A590037\",\"device_type_id\":1284,\"device_name\":\"Stadt Temperatur 1028 Kleine Breikamp\",\"device_id\":9999,\"application_id\":1143,\"account_id\":264}",
+        "payloadType": "json",
+        "x": 200,
+        "y": 340,
+        "wires": [
+            [
+                "6b4449f71cd82dc8"
+            ]
+        ]
+    },
+    {
+        "id": "3df85f6d0a27ea86",
+        "type": "http request",
+        "z": "c0dc0e174b7cfcb9",
+        "name": "Update Timeseries",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "{{{baseUrl}}}/timeseries-management/timeseries/{{{stationId}}}",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 830,
+        "y": 340,
+        "wires": [
+            [
+                "43ab04bd486538cb"
+            ]
+        ]
+    },
+    {
+        "id": "6b4449f71cd82dc8",
+        "type": "function",
+        "z": "c0dc0e174b7cfcb9",
+        "name": "Create Add Timeseries Request",
+        "func": "const measurement = msg.payload;\nconst params = [\"Temperatur\", \"Luftfeuchte\"]\nlet timestamp = measurement.source_time;\nlet outputMsgs = [];\n\nfor (let param of params) {\n    let timeseries = [];\n    if (measurement.parsed[param]) {\n        let timeseries_payload = {\n            parameter_name: param,\n            timeseries: []\n        };\n        timeseries.push(\n            {\n                value: measurement.parsed[param],\n                timestamp: timestamp\n\n            }\n        );\n        timeseries_payload.timeseries = timeseries\n\n        let msg = {\n            'baseUrl': env.get(\"KOMMONITOR_TIMESERIES_API_URL\"),\n            'stationId': measurement.device_id,\n            'payload': timeseries_payload,\n        }\n        outputMsgs.push(msg);\n    }\n    else {\n        node.warn(\"No parameter with name. \" + param);\n    }\n} \nreturn [outputMsgs];",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 490,
+        "y": 340,
+        "wires": [
+            [
+                "3df85f6d0a27ea86"
+            ]
+        ]
+    },
+    {
+        "id": "43ab04bd486538cb",
         "type": "debug",
-        "z": "d15d33a4fa9a8ad9",
-        "g": "7f22873286146e83",
-        "name": "DBG 3",
+        "z": "c0dc0e174b7cfcb9",
+        "name": "Debug Update Timeseries Request",
         "active": true,
         "tosidebar": true,
         "console": false,
@@ -1519,133 +998,30 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1164,
-        "y": 640,
+        "x": 1140,
+        "y": 340,
         "wires": []
     },
     {
-        "id": "1e2169485cd2be43",
-        "type": "function",
-        "z": "d15d33a4fa9a8ad9",
-        "g": "54025cb0a19e0f14",
-        "name": "Set refreshToken",
-        "func": "if (msg.oauth2Response.refresh_token) {\n    global.set('refreshToken', msg.oauth2Response.refresh_token);\n}\nif (msg.oauth2Response.access_token) {\n    global.set('accessToken', msg.oauth2Response.access_token);\n}\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 990,
-        "y": 220,
-        "wires": [
-            [
-                "d7a2041ef2683870"
-            ]
-        ]
-    },
-    {
-        "id": "147aae5c70a7eecb",
-        "type": "function",
-        "z": "d15d33a4fa9a8ad9",
-        "g": "54025cb0a19e0f14",
-        "name": "set msg.oauth2Request",
-        "func": "msg.oauth2Request = { \n    \"access_token_url\": \"http://localhost:8080/v1/oauth/tokens\",\n    \"credentials\": {\n        \"grant_type\": \"client_credentials\",\n        \"client_id\": \"test_client_1\",\n        \"client_secret\": \"test_secret\",\n        \"scope\": \"read_write\"\n    },\n};\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 430,
-        "y": 280,
-        "wires": [
-            [
-                "10de26226e66ea9e"
-            ]
-        ]
-    },
-    {
-        "id": "10de26226e66ea9e",
-        "type": "oauth2",
-        "z": "d15d33a4fa9a8ad9",
-        "g": "54025cb0a19e0f14",
-        "name": "Set by msg.oauth2Request",
-        "container": "oauth2Response",
-        "grant_type": "set_by_credentials",
-        "access_token_url": "http://localhost:3000/oauth/token ",
-        "authorization_endpoint": "",
-        "open_authentication": "",
-        "username": "pedroet",
-        "password": "",
-        "client_id": "confidentialApplication",
-        "client_secret": "topSecret",
-        "scope": "*",
-        "client_credentials_in_body": false,
-        "rejectUnauthorized": true,
-        "headers": {},
-        "x": 720,
-        "y": 280,
-        "wires": [
-            [
-                "1e2169485cd2be43"
-            ]
-        ]
-    },
-    {
-        "id": "ca6a8cddea946ab2",
-        "type": "inject",
-        "z": "d15d33a4fa9a8ad9",
-        "g": "54025cb0a19e0f14",
+        "id": "0427c8db754d9737",
+        "type": "catch",
+        "z": "c0dc0e174b7cfcb9",
         "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
+        "scope": null,
+        "uncaught": false,
         "x": 180,
-        "y": 280,
+        "y": 440,
         "wires": [
             [
-                "147aae5c70a7eecb"
+                "fdd90742c193177f"
             ]
         ]
     },
     {
-        "id": "8bd177259bc473f4",
-        "type": "function",
-        "z": "d15d33a4fa9a8ad9",
-        "g": "f37b3410d0e03c57",
-        "name": "Set refreshToken",
-        "func": "if (msg.oauth2Response.refresh_token) {\n    global.set('refreshToken', msg.oauth2Response.refresh_token);\n}\nif (msg.oauth2Response.access_token) {\n    global.set('accessToken', msg.oauth2Response.access_token);\n}\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 990,
-        "y": 100,
-        "wires": [
-            [
-                "d340377991d2d9b9"
-            ]
-        ]
-    },
-    {
-        "id": "d340377991d2d9b9",
+        "id": "fdd90742c193177f",
         "type": "debug",
-        "z": "d15d33a4fa9a8ad9",
-        "g": "f37b3410d0e03c57",
-        "name": "DBG 1",
+        "z": "c0dc0e174b7cfcb9",
+        "name": "Debug Error",
         "active": true,
         "tosidebar": true,
         "console": false,
@@ -1654,181 +1030,46 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1190,
-        "y": 100,
+        "x": 410,
+        "y": 440,
         "wires": []
     },
     {
-        "id": "5ff7fb2616706080",
-        "type": "oauth2",
-        "z": "d15d33a4fa9a8ad9",
-        "g": "a783ce686ac81a0c",
-        "name": "Set by msg.oauth2Request",
-        "container": "oauth2Response",
-        "grant_type": "set_by_credentials",
-        "access_token_url": "http://localhost:3000/oauth/token ",
-        "authorization_endpoint": "",
-        "open_authentication": "",
-        "username": "pedroet",
-        "password": "",
-        "client_id": "confidentialApplication",
-        "client_secret": "topSecret",
-        "scope": "*",
-        "client_credentials_in_body": false,
-        "rejectUnauthorized": true,
-        "headers": {},
-        "x": 720,
-        "y": 440,
-        "wires": [
-            [
-                "d857d0bc3e90d394"
-            ]
-        ]
-    },
-    {
-        "id": "8eadc61e4e5b4ac2",
-        "type": "function",
-        "z": "d15d33a4fa9a8ad9",
-        "g": "a783ce686ac81a0c",
-        "name": "set msg.oauth2Request",
-        "func": "msg.oauth2Request = {\n    \"access_token_url\": \"http://localhost:8080/v1/oauth/tokens\",\n    \"credentials\": {\n        \"grant_type\": \"password\",\n        \"client_id\": \"test_client_1\",\n        \"client_secret\": \"test_secret\",\n        \"scope\": \"read_write\",\n        \"username\": \"test@user\",\n        \"password\": \"test_password\"\n    },\n};\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 430,
-        "y": 440,
-        "wires": [
-            [
-                "5ff7fb2616706080"
-            ]
-        ]
-    },
-    {
-        "id": "d857d0bc3e90d394",
-        "type": "function",
-        "z": "d15d33a4fa9a8ad9",
-        "g": "a783ce686ac81a0c",
-        "name": "Set refreshToken",
-        "func": "if (msg.oauth2Response.refresh_token) {\n    global.set('refreshToken', msg.oauth2Response.refresh_token);\n}\nif (msg.oauth2Response.access_token) {\n    global.set('accessToken', msg.oauth2Response.access_token);\n}\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 990,
-        "y": 380,
-        "wires": [
-            [
-                "dcbde702eae7191d"
-            ]
-        ]
-    },
-    {
-        "id": "95745c4253c151f0",
-        "type": "inject",
-        "z": "d15d33a4fa9a8ad9",
-        "g": "a783ce686ac81a0c",
+        "id": "c3e1d5cbde44602b",
+        "type": "mqtt in",
+        "z": "c0dc0e174b7cfcb9",
         "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 180,
-        "y": 440,
+        "topic": "consumers/592/apps/+/devices/+",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "194992c8558abaa1",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 250,
+        "y": 180,
         "wires": [
             [
-                "8eadc61e4e5b4ac2"
+                "fd16a5678a7188da",
+                "6b4449f71cd82dc8"
             ]
         ]
     },
     {
-        "id": "dcbde702eae7191d",
+        "id": "fd16a5678a7188da",
         "type": "debug",
-        "z": "d15d33a4fa9a8ad9",
-        "g": "a783ce686ac81a0c",
-        "name": "DBG 3",
+        "z": "c0dc0e174b7cfcb9",
+        "name": "debug 1",
         "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
+        "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1190,
-        "y": 380,
+        "x": 560,
+        "y": 180,
         "wires": []
-    },
-    {
-        "id": "d6a9695a923ab18b",
-        "type": "inject",
-        "z": "d15d33a4fa9a8ad9",
-        "g": "a783ce686ac81a0c",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 180,
-        "y": 380,
-        "wires": [
-            [
-                "c5da03044bdca6f1"
-            ]
-        ]
-    },
-    {
-        "id": "c5da03044bdca6f1",
-        "type": "oauth2",
-        "z": "d15d33a4fa9a8ad9",
-        "g": "a783ce686ac81a0c",
-        "name": "Password",
-        "container": "oauth2Response",
-        "grant_type": "password",
-        "access_token_url": "http://localhost:8080/v1/oauth/tokens",
-        "authorization_endpoint": "http://localhost:8080/web/authorize",
-        "redirect_uri": "/oauth2/redirect_uri",
-        "open_authentication": "41595d3b-a2b5-41aa-84e7-02d2c7b54304",
-        "username": "caputo.marcos@gmail.com",
-        "password": "123123",
-        "client_id": "test_client_1",
-        "client_secret": "test_secret",
-        "scope": "read_write",
-        "client_credentials_in_body": false,
-        "rejectUnauthorized": true,
-        "headers": {},
-        "x": 480,
-        "y": 380,
-        "wires": [
-            [
-                "d857d0bc3e90d394"
-            ]
-        ]
     }
 ]
