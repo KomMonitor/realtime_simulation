@@ -28,7 +28,6 @@ services:
       - KC_BOOTSTRAP_ADMIN_USERNAME=admin
       - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
       - KC_DB=dev-file
-
   kommonitor-client:
     image: 'kommonitor/web-client:4.3.5'
     # image: 'kommonitor/web-client-ng'
@@ -42,6 +41,21 @@ services:
       - ./config/client.env
     ports:
       - 8084:80
+    networks:
+      - ${NETWORK_NAME}
+  kommonitor-client-timeseries:
+    image: 'kommonitor/web-client-ng-realtime'
+    # image: 'kommonitor/web-client-ng'
+    container_name: kommonitor-client-timeseries
+    restart: unless-stopped
+    volumes:
+      - ./storage/client/config-storage-server.json:/usr/share/nginx/html/config/config-storage-server.json
+    environment:
+      - KOMMONITOR_NAME=kommonitor-web-client
+    env_file:
+      - ./config/client.env
+    ports:
+      - 9084:80
     networks:
       - ${NETWORK_NAME}
 
@@ -94,7 +108,7 @@ services:
       - ./config/db.env
 
   kommonitor-data-management:
-    image: kommonitor/data-management:5.1.6
+    image: kommonitor/data-management:5.2.0-SNAPSHOT
     container_name: kommonitor-data-management
     restart: unless-stopped
     depends_on:

@@ -34,10 +34,15 @@ Beinhaltet ein Docker Compose Setup für Middleware der Realtime Simulation:
 * TimescaleDB: Persistierung der IoT Daten als Zeitreihendaten
 
 ## Bauen der Realtime Simulation
-Alle Anendungen der Realtime Simulation können innerhalb des [./docker_realtimesimulation](./docker_realtimesimulation) 
+Alle Anwendungen der Realtime Simulation können innerhalb des [./docker_realtimesimulation](./docker_realtimesimulation) 
 Verzeichnis gebaut werden mit:
 ```bash
 docker compose build
+```
+## Bauen des Web Clients
+Um den KomMonitor Web Client mit Echtzeit-Features zu bauen:
+```bash
+docker build -t kommonitor/web-client-ng-realtime https://github.com/KomMonitor/web-client.git#feature/real-time-data
 ```
 
 ## Startup

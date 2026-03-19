@@ -149,6 +149,9 @@ try {
   window.__env.targetUrlToSpatialDataProcessorInstance = 'http://localhost:8090/';
   window.__env.spatialDataProcessor_processName_indicatorReachabilityStatistics = "isochrone-prune";
 
+  // KomMonitor Timeseries API
+  window.__env.targetUrlToTimeseriesService = 'http://localhost:8086/timeseries-management';
+
   // optional geometry simplification (a feature of Data Management API)
   window.__env.simplifyGeometriesParameterName = "simplifyGeometries";
   // allowed values and meaning:
@@ -162,9 +165,14 @@ try {
   // number of decimals for display of numeric values in app
   window.__env.numberOfDecimals = 2;
 
+  // Münster
+  window.__env.initialLatitude = 51.95788749488407;
+  window.__env.initialLongitude = 7.62545262160161;
+  
   // starting viewpoint parameters and zoom level
-  window.__env.initialLatitude = 51.4386432;
-  window.__env.initialLongitude = 7.0115552;
+  // Herne
+  //window.__env.initialLatitude = 51.4386432;
+  //window.__env.initialLongitude = 7.0115552;
   window.__env.initialZoomLevel = 12;
   // window.__env.minZoomLevel = 11;
   window.__env.minZoomLevel = 5;
