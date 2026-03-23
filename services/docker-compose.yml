@@ -47,23 +47,23 @@ services:
     networks:
       - ${NETWORK_NAME}
 
-  timescaledb:
-    image: timescale/timescaledb:latest-pg13
-    environment:
-      POSTGRES_PASSWORD: yourpassword
-      POSTGRES_USER: youruser
-      POSTGRES_DB: yourdb
-    ports:
-      - "5434:5432"  # Extern 5434, intern 5432
-    volumes:
-      - timescale_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U youruser -d yourdb"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    networks:
-      - ${NETWORK_NAME}
+  # timescaledb:
+  #   image: timescale/timescaledb:latest-pg13
+  #   environment:
+  #     POSTGRES_PASSWORD: yourpassword
+  #     POSTGRES_USER: youruser
+  #     POSTGRES_DB: yourdb
+  #   ports:
+  #     - "5434:5432"  # Extern 5434, intern 5432
+  #   volumes:
+  #     - timescale_data:/var/lib/postgresql/data
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "pg_isready -U youruser -d yourdb"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+  #   networks:
+  #     - ${NETWORK_NAME}
 
   # pgadmin:
   #   image: dpage/pgadmin4:latest
