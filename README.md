@@ -37,7 +37,7 @@ Beinhaltet ein Docker Compose Setup für Middleware der Realtime Simulation:
 Alle Anwendungen der Realtime Simulation können innerhalb des [./docker_realtimesimulation](./docker_realtimesimulation) 
 Verzeichnis gebaut werden mit:
 ```bash
-docker compose build
+docker compose --profile "*" build
 ```
 ## Bauen des Web Clients
 Um den KomMonitor Web Client mit Echtzeit-Features zu bauen:
@@ -123,7 +123,7 @@ Instanz unter *Einstellungen -> Environment* gesetzt werden:
 | `KOMMONITOR_DATA_MANAGEMENT_URL` | Root URL zur KomMonitor Data Management API       | http://kommonitor-data-management:8085                               |
 | `KOMMONITOR_TIMESERIES_API_URL`  | Root URL zur KomMonitor Timeseries API            | http://kommonitor-timeseries-management:8086                         |
 
-#### KomMonitor Config Data
+#### KomMonitor Config Daten
 Der Node-RED Flow *01 - Spatio-temporal Aggregation* benötigt außerdem Informationen darüber, für welche
 Indikatoren und Raumebenen die aggregierte Zeitreihendaten hinzugefügt werden sollen. Die Informationen werden
 in der Config-Datei unter [./services/nodered/data/config.json](./services/nodered/data/config.json) bereitgestellt.
@@ -139,8 +139,60 @@ Liste mit Raumebenen, für die eine Aggregation erfolgen soll. `id` und `name` e
 zu den Raumebenen in KomMonitor.
 
 ### 01 - Spatio-temporal Aggregation
-Der Node-RED Flow *01 - Spatio-temporal Aggregation* empfängt Stramoverbrauchsdaten von einem MQTT-Stream und
-aggregiert diese zu Tageswerten. 
+Der Node-RED Flow **01 - Spatio-temporal Aggregation** empfängt Stramoverbrauchsdaten von einem MQTT-Stream und
+aggregiert diese zu Tageswerten. Der Flow ist in mehrere Sub-Flows unterteilt, wobei einige der Sub-Flows
+Kontextinformationen für den Hauptflow (04 - Aggregate Energy Consumption) setzen. Jeder Flow startet mit einem 
+Inject-Knoten, der auch manuell getriggert werde kann. Zur Nutzung des Flows sollte wie folgt vorgegangen werden:
+
+#### 01 - KomMonitor Config Daten setzen
+Um die KomMonitor Config Datei [./services/nodered/data/config.json](./services/nodered/data/config.json) auszulesen 
+und Mapping Informationen zu setzen, kann der *Inject Mapping File* Knoten des *01 - Read KomMonitor Config* Flows
+ausgeführt werden.
+
+#### 02 - Keycloak Authentifizierung
+Um Daten aus der KomMonitor Data Management API auszulesen und die aggregierten Indikator-Zeitreihen zu speichern,
+ist ein Keycloak Token notwendig. Dieser kann über den Subflow **02 - Keycloak Authentication** abgerufen und als 
+Kontextinformation gesetzt werden. Der Knoten *KomMonitor Auth* enthält wichtige Verbindungsparameter für Keycloak
+und muss ggf. angepasst werden.
+
+#### 03 - KomMonitor Raumebenen abrufen
+Der Subflow **03 - Request and Store Spatial Units** ruft die in der KomMonitor Config Datei
+[./services/nodered/data/config.json](./services/nodered/data/config.json) definiereten Raumebenen ab.
+Diese werden im Hauptflow für die Durchführung der räumlichen Aggregation verwendet.
+
+#### 04 - Raum-zeitliche Aggregation von Stromverbrauchsdaten
+Die gesamte Anwendungslogik steckt im Hauptflow **04 - Aggregate Energy Consumption**. Dieser geht wie folgt vor:  
+
+1. Ein MQTT-Inject Knoten empfängt Nachrichten zu Stromverbrauchstdaten, die über den HiveMQ Broker unter dem Topic
+*node-red/stromdaten* veröffentlicht werden.  
+
+2. Die Knoten *Reset Timer*, *Fire Timer Finished* und *Wait for Timer Finished* sorgen dafür, dass alle MQTT-Nachrichten
+für eine bestimmte Zeit gesammelt werden, bevor die raum-zeitliche Aggregation erfolgt. Über den *Reset Timer* Knoten,
+kann dieses Zeitintervall gesetz werdenb. Wenn etwa eine Aggregation zu Tageswerten gewünscht ist, müsste die 
+Wiederholungsrate auf einen festen täglichen Zeitpunkt z.B. `0:01` (kleiner zeitlicher Lag, um sicherzustellen, dass 
+verspätete Nachrichten des vergangenen Tages mit berücksichtigt werden). Für den simulierten Use Case sollte ein 
+geringeres Zeitintervall gesetzt werden, das auch zum Simulationsintervall passt.
+
+3. Die raum-zeitliche Aggregation kann auch ohne vorherigen MQTT-Input angestoßen werden. Hierzu lassen sich
+über den *Inject Test Data* Knoten einige Testdaten manuell injecten.
+
+4. Im Knoten *Daily Aggregation* erfolgt eine zeitliche Aggregation der Stromverbrauchsdaten unter Berücksichtigung
+aller bis zum Trigger-Zeitpunkt eingelaufenen MQTT-Nachrichten pro Wohngebäude.
+
+5. Der Knoten *Loop for Spatial Units* sorgt dafür, dass für jede in der KomMonitor Config Datei hinterlegte
+Raumebne die räumliche Aggregation durchgeführt wird.
+
+6. Im Knoten *Spatial Aggregation* erfolgt die räumliche Aggregation der zuvor zeitliche aggregierten Stromverbrauchsdaten
+von Gebäuden. Hierzu wird für jedes Raumeinheiten-Feature einer Raumebene ermittelt, welche Gebäude innerhalb des 
+Feature-Polygons liegen, und über alle zeitliche aggregierten Stromverbrauchsdaten des Gebäudes eine räumliche Aggregation
+durchgeführt. Es werden vier verschiedene aggregierte Metriken ermittelt:  *Durchschnittlicher stündlicher Energieverbrauch*, *Durchschnittlicher täglicher Energieverbrauch Gebäude*, *Gesamter täglicher Energieverbrauch Gebäude*
+und *Kumulierter durchschnittlicher stündlicher Energieverbrauch Gebäude*.
+
+7. Der Knoten *Create Multiple Indicator Update Requests* überführt die aggregierten Zeitreihendaten in das von der
+KomMonitor Data Management API erwartete Datenschema und stellt für jede der aggregierten Metriken einen entsprechenden
+API Request zum Update der Zeitreihen des entsprechenden Indikators zusammen.
+
+8. Im Knoten *Update Indicator* wird der API Request zum Update der Indikatorzeitreihen durchgeführt.
 
 ### 02 - Timeseries Harvesting
 Der Node-RED Flow *02 - Timeseries Harvesting* empfängt dagegen Messwerte von
