@@ -138,29 +138,32 @@ KomMonitor angelegt worden sein.
 Liste mit Raumebenen, für die eine Aggregation erfolgen soll. `id` und `name` entsprechen den Metadateninformationen
 zu den Raumebenen in KomMonitor.
 
+### Datenvorbereitungen
+TBD
+
 ### 01 - Spatio-temporal Aggregation
 Der Node-RED Flow **01 - Spatio-temporal Aggregation** empfängt Stramoverbrauchsdaten von einem MQTT-Stream und
 aggregiert diese zu Tageswerten. Der Flow ist in mehrere Sub-Flows unterteilt, wobei einige der Sub-Flows
 Kontextinformationen für den Hauptflow (04 - Aggregate Energy Consumption) setzen. Jeder Flow startet mit einem 
 Inject-Knoten, der auch manuell getriggert werde kann. Zur Nutzung des Flows sollte wie folgt vorgegangen werden:
 
-#### 01 - KomMonitor Config Daten setzen
+#### 1. KomMonitor Config Daten setzen
 Um die KomMonitor Config Datei [./services/nodered/data/config.json](./services/nodered/data/config.json) auszulesen 
 und Mapping Informationen zu setzen, kann der *Inject Mapping File* Knoten des *01 - Read KomMonitor Config* Flows
 ausgeführt werden.
 
-#### 02 - Keycloak Authentifizierung
+#### 2. Keycloak Authentifizierung
 Um Daten aus der KomMonitor Data Management API auszulesen und die aggregierten Indikator-Zeitreihen zu speichern,
 ist ein Keycloak Token notwendig. Dieser kann über den Subflow **02 - Keycloak Authentication** abgerufen und als 
 Kontextinformation gesetzt werden. Der Knoten *KomMonitor Auth* enthält wichtige Verbindungsparameter für Keycloak
 und muss ggf. angepasst werden.
 
-#### 03 - KomMonitor Raumebenen abrufen
+#### 3. KomMonitor Raumebenen abrufen
 Der Subflow **03 - Request and Store Spatial Units** ruft die in der KomMonitor Config Datei
 [./services/nodered/data/config.json](./services/nodered/data/config.json) definiereten Raumebenen ab.
 Diese werden im Hauptflow für die Durchführung der räumlichen Aggregation verwendet.
 
-#### 04 - Raum-zeitliche Aggregation von Stromverbrauchsdaten
+#### 4. Raum-zeitliche Aggregation von Stromverbrauchsdaten
 Die gesamte Anwendungslogik steckt im Hauptflow **04 - Aggregate Energy Consumption**. Dieser geht wie folgt vor:  
 
 1. Ein MQTT-Inject Knoten empfängt Nachrichten zu Stromverbrauchstdaten, die über den HiveMQ Broker unter dem Topic
@@ -185,8 +188,9 @@ Raumebne die räumliche Aggregation durchgeführt wird.
 6. Im Knoten *Spatial Aggregation* erfolgt die räumliche Aggregation der zuvor zeitliche aggregierten Stromverbrauchsdaten
 von Gebäuden. Hierzu wird für jedes Raumeinheiten-Feature einer Raumebene ermittelt, welche Gebäude innerhalb des 
 Feature-Polygons liegen, und über alle zeitliche aggregierten Stromverbrauchsdaten des Gebäudes eine räumliche Aggregation
-durchgeführt. Es werden vier verschiedene aggregierte Metriken ermittelt:  *Durchschnittlicher stündlicher Energieverbrauch*, *Durchschnittlicher täglicher Energieverbrauch Gebäude*, *Gesamter täglicher Energieverbrauch Gebäude*
-und *Kumulierter durchschnittlicher stündlicher Energieverbrauch Gebäude*.
+durchgeführt. Es werden vier verschiedene aggregierte Metriken ermittelt:  *Durchschnittlicher stündlicher Energieverbrauch*, 
+*Durchschnittlicher täglicher Energieverbrauch Gebäude*, *Gesamter täglicher Energieverbrauch Gebäude* und
+ *Kumulierter durchschnittlicher stündlicher Energieverbrauch Gebäude*.
 
 7. Der Knoten *Create Multiple Indicator Update Requests* überführt die aggregierten Zeitreihendaten in das von der
 KomMonitor Data Management API erwartete Datenschema und stellt für jede der aggregierten Metriken einen entsprechenden
@@ -195,5 +199,33 @@ API Request zum Update der Zeitreihen des entsprechenden Indikators zusammen.
 8. Im Knoten *Update Indicator* wird der API Request zum Update der Indikatorzeitreihen durchgeführt.
 
 ### 02 - Timeseries Harvesting
-Der Node-RED Flow *02 - Timeseries Harvesting* empfängt dagegen Messwerte von
-Klimamessstationen und speichert die Rohwerte in einer Timeseriees Datenbank.
+Der Node-RED Flow *02 - Timeseries Harvesting* empfängt Messwerte von Klimamessstationen und speichert die Rohwerte über
+eine Timeseries API in einer Timeseries Datenbank:
+
+1. Ein *MQTT-Inject* Knoten verbindet sich mit einem externen MQTT-Stream und empfängt regelmäßig Nachrichten mit Klimamesswerten.
+Die Verbindungsparameter zum MQTT-Broker müssen für die eigene Umgebung angepasst werden.
+
+2. Alternativ lassen sich einige exemplarische Messwerte über den *Inject Test Data* Knoten injecten.
+
+3. Der *Create Add Timeseries Request* liest die relevanten Parameter aus den empfangenen MQTT-Nachrichten aus
+und bereitet damit einen Request gegen die Timeseries API vor, um Messdaten der Stationen zu einzelnen Zeitpunkten
+zu ergänzen. Ein solcher Request wird gegen den Endpunkt `/timeseries-management/timeseries/{stationId}` abgesetzt und
+besitzt folgendes Payload-Schema:
+
+```json
+{
+  "parameter_name": "Temperatur",
+  "timeseries": [
+    {
+      "value": 12.1,
+      "timestamp": "2026-03-24T10:39:22.336Z"
+    }
+  ]
+}
+```
+Wichtig ist, dass sich Werte sowohl für `{stationId}` aus dem API Endpunkt sowie für den Parameter `parameter_name`
+im Request Payload in den MQTT-Nachrichten vorhanden sind und ausgelesen werden können. Über diese beiden Werte
+erfolgt in der Timeseries API nämlich die Zuordnung der Messwerte zu einem bestimmten Messparameter einer bestimmten Station.
+
+4. Der Knoten *Update Timeseries* wird schließlich der API Request zum Fortführen der Messzeitreihe in der
+Timeseries API abgesetzt.
