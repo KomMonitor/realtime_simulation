@@ -9,6 +9,7 @@ from kafka import KafkaProducer
 from kafka.errors import KafkaError
 import os
 
+# Simulationsintervall in Sekunden (Standard: 30 Sekunden)
 EC_PUSH_TIME = float(os.getenv("EC_PUSH_TIME", "30"))
 
 # Kafka-Konfiguration

@@ -10,7 +10,7 @@ services:
     build: ./energyconsumption_simulation
     profiles: [energyconsumption]
     environment:
-      - EC_PUSH_TIME=30
+      - EC_PUSH_TIME=30 # Simulationsintervall in Sekunden
     networks:
       - ${NETWORK_NAME}
 

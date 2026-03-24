@@ -124,9 +124,9 @@ services:
       - ./config/data-management.env
       - ./config/keycloak.env
 
-  timescale-db:
+  km-timescale-db:
     image: timescale/timescaledb-ha:pg17.7-ts2.25.0-all
-    container_name: timescale-db
+    container_name: km-timescale-db
     ports:
       - 5433:5432
     healthcheck:
@@ -142,7 +142,7 @@ services:
       - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
       # - ./storage/timescale/data:/home/postgres/pgdata/data
-      - ./storage/timescale/data:/var/lib/postgresql/data
+      - ./storage/timescale/data01:/var/lib/postgresql/data
       # - timescale_data:/pgdata
     networks:
       - ${NETWORK_NAME}
@@ -151,22 +151,20 @@ services:
     image: kommonitor/timeseries-management
     container_name: kommonitor-timeseries-management
     depends_on:
-      timescale-db:
+      km-timescale-db:
         condition: service_healthy
     ports:
       - "8086:8086"
     networks:
       - ${NETWORK_NAME}
     links:
-      - timescale-db
+      - km-timescale-db
     environment:
       - SERVER_PORT=8086
       - LOGGING_LEVEL_DE_HSBO_KOMMONITOR=INFO
       - LOGGING_LEVEL_ROOT=INFO
-      - DATABASE_HOST=timescale-db
+      - DATABASE_HOST=km-timescale-db
       - DATABASE_USER=postgres
       - DATABASE_PASSWORD=kommonitor
       - DATABASE_NAME=kommonitor_data 
       - DATABASE_PORT=5432
-volumes:
- timescale_data:
